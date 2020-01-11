@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "789150734075",
+    "firebase_url": "https://diplompro-be7ed.firebaseio.com",
+    "project_id": "diplompro-be7ed",
+    "storage_bucket": "diplompro-be7ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789150734075:android:c3f5c0c2e08baab7a9025e",
+        "android_client_info": {
+          "package_name": "com.example.diplompart2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "789150734075-6i9tdt5abs7l470b3mk17jsqofpgpg3n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.diplompart2",
+            "certificate_hash": "d6668ab45be12667a7014e20110f2c49173f12c2"
+          }
+        },
+        {
+          "client_id": "789150734075-fau23djp6qlsnmr7k17ikvleacccq4q5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAoISapBISiMu-LvdQhr6N_kTdnm5J3n0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "789150734075-fau23djp6qlsnmr7k17ikvleacccq4q5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
