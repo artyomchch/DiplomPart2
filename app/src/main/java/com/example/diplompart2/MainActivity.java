@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.diplompart2.login_regist.fragment_login;
 import com.example.diplompart2.login_regist.fragment_registration;
 import com.example.diplompart2.login_regist.interfaces.OnActivityDataListener;
@@ -155,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                 mListener.onActivityDataListener();
                 if (!glEmail.equals("")& (!glPassword.equals(""))) {
                     signin(glEmail, glPassword);
+
                 }
                 break;
             case R.id.sign_up_regis:
@@ -163,7 +166,8 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                    registration(regEmail, regPassword);
                 }
                 break;
-
+            case R.id.skip:
+                goToActive(WorkActivity.class);
                 default:
                     break;
         }
@@ -206,7 +210,8 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                             Log.d("ss", "signInWithEmail:success");
                             Toast.makeText(MainActivity.this, "signInWithEmail:success",
                                     Toast.LENGTH_SHORT).show();
-                           // goToActive(WorkActivity.class);
+                            goToActive(WorkActivity.class);
+
                             FirebaseUser user = mAuth.getCurrentUser();
                             // updateUI(user);
                         } else {
@@ -261,6 +266,12 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                     .add(R.id.fragmentRegistration, fragment)
                     .commit();
         }
+    }
+
+    public void goToActive(Class activity){
+        Intent intent = new Intent(this, activity);
+        startActivity(intent);
+        Animatoo.animateFade(this);
     }
 }
 
