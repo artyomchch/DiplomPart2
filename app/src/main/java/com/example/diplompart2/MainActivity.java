@@ -25,16 +25,24 @@ import com.example.diplompart2.login_regist.interfaces.OnActivityDataListener;
 import com.example.diplompart2.login_regist.interfaces.OnActivityDataListenerRegister;
 import com.example.diplompart2.login_regist.interfaces.OnFragment1DataListener;
 import com.example.diplompart2.login_regist.interfaces.OnFragment2DataListener;
+import com.example.diplompart2.login_regist.validation.RxEditText;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.function.Function;
+
+import io.reactivex.Observable;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Function3;
+
 public class MainActivity extends AppCompatActivity implements OnFragment1DataListener, OnFragment2DataListener {
 
     Fragment fragment1, fragment2;
     FragmentTransaction fragmentTransaction;
+    //Buttons ..
     Button signIn, signUp, back, signUpReg;
     //TextView
     private TextView textView;
@@ -97,6 +105,23 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         loginFragment();
 
 
+        signIn.setEnabled(false);
+        signUpReg.setEnabled(false);
+
+        fragment_login login = new fragment_login();
+        Observable<String> emailObservable = RxEditText.getTextWatcherObservable(login.geteLogin());
+        Observable<String> passwordObservable = RxEditText.getTextWatcherObservable(login.getePassword());
+
+        Observable.combineLatest(emailObservable, passwordObservable, new BiFunction<String, String, Boolean>() {
+            @Override
+            public Boolean apply(String s, String s2) throws Exception {
+                if (s.isEmpty() || s2.isEmpty())
+                    return false;
+
+                return null;
+            }
+        })
+
     }
 
     @Override
@@ -105,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
     }
+
+
 
 
     public void Change (View view){
@@ -172,9 +199,7 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                     break;
         }
 
-
     }
-
 
     public void registration (String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -198,7 +223,6 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                     }
                 });
     }
-
 
     public void signin(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
@@ -226,7 +250,6 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                     }
                 });
     }
-
 
     public void loginFragment() {
         FragmentManager fm = getSupportFragmentManager();

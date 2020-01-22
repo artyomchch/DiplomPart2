@@ -1,8 +1,6 @@
 package com.example.diplompart2.login_regist;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.diplompart2.MainActivity;
 import com.example.diplompart2.R;
 import com.example.diplompart2.login_regist.interfaces.OnActivityDataListener;
 import com.example.diplompart2.login_regist.interfaces.OnFragment1DataListener;
@@ -20,11 +17,24 @@ import com.example.diplompart2.login_regist.interfaces.OnFragment1DataListener;
 
 public class fragment_login extends Fragment implements OnActivityDataListener {
 
-    EditText eLogin, ePassword;
+    private EditText eLogin;
+
+
+
+    private EditText ePassword;
+
+
+
     private OnFragment1DataListener mListener;
 
 
+    public EditText geteLogin() {
+        return eLogin;
+    }
 
+    public EditText getePassword() {
+        return ePassword;
+    }
 
 
 
@@ -56,4 +66,8 @@ public class fragment_login extends Fragment implements OnActivityDataListener {
                     + " must implement OnFragment1DataListener");
         }
     }
+
+
+
+
 }
