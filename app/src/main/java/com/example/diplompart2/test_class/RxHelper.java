@@ -32,7 +32,7 @@ public class RxHelper {
                         emitter.onComplete();
                     }
                 })
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .map(s->s.toUpperCase())
                 .cache()
                 .observeOn(AndroidSchedulers.mainThread());

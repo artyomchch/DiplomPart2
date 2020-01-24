@@ -7,14 +7,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,18 +23,15 @@ import com.example.diplompart2.login_regist.interfaces.OnActivityDataListener;
 import com.example.diplompart2.login_regist.interfaces.OnActivityDataListenerRegister;
 import com.example.diplompart2.login_regist.interfaces.OnFragment1DataListener;
 import com.example.diplompart2.login_regist.interfaces.OnFragment2DataListener;
-import com.example.diplompart2.login_regist.validation.RxEditText;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.function.Function;
-
 import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Function3;
+import io.reactivex.observers.DisposableObserver;
 
 public class MainActivity extends AppCompatActivity implements OnFragment1DataListener, OnFragment2DataListener {
 
@@ -104,23 +99,6 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
 
         loginFragment();
 
-
-        signIn.setEnabled(false);
-        signUpReg.setEnabled(false);
-
-        fragment_login login = new fragment_login();
-        Observable<String> emailObservable = RxEditText.getTextWatcherObservable(login.geteLogin());
-        Observable<String> passwordObservable = RxEditText.getTextWatcherObservable(login.getePassword());
-
-        Observable.combineLatest(emailObservable, passwordObservable, new BiFunction<String, String, Boolean>() {
-            @Override
-            public Boolean apply(String s, String s2) throws Exception {
-                if (s.isEmpty() || s2.isEmpty())
-                    return false;
-
-                return null;
-            }
-        })
 
     }
 
