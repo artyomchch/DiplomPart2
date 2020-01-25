@@ -2,17 +2,22 @@ package com.example.diplompart2;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
     public String glPassword;
     public String regEmail;
     public String regPassword;
+
+    //layouts ..
+    ConstraintLayout mainLayout;
+
+    // Animation
+    AnimationDrawable animationDrawable;
+
 
 
     @Override
@@ -96,6 +108,15 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         fragmentTransaction.replace(R.id.frameLayout, fragment1).commit();
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
+        //layouts
+        mainLayout = findViewById(R.id.linearL);
+        //animation
+        animationDrawable = (AnimationDrawable) mainLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(4500);
+        animationDrawable.setExitFadeDuration(4500);
+        animationDrawable.start();
+
 
         loginFragment();
 
