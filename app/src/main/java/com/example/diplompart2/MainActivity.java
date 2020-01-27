@@ -8,9 +8,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.Layout;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +24,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +35,18 @@ import com.example.diplompart2.login_regist.interfaces.OnActivityDataListener;
 import com.example.diplompart2.login_regist.interfaces.OnActivityDataListenerRegister;
 import com.example.diplompart2.login_regist.interfaces.OnFragment1DataListener;
 import com.example.diplompart2.login_regist.interfaces.OnFragment2DataListener;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.github.ybq.android.spinkit.style.FoldingCube;
+import com.github.ybq.android.spinkit.style.ThreeBounce;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.marozzi.roundbutton.RoundButton;
 
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.observers.DisposableObserver;
@@ -65,12 +78,14 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
     // Animation
     AnimationDrawable animationDrawable;
 
+    // ProgressBar
+    ProgressBar progressBar;
 
 
     @Override
     public void onFragment1DataListener(String email, String password) {
         textView.setText(email);
-        textView.append("   "  + password);
+        textView.append("   " + password);
         glEmail = email;
         glPassword = password;
     }
@@ -78,12 +93,10 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
     @Override
     public void onFragment2DataListener(String email, String password) {
         textView.setText(email);
-        textView.append("   "  + password);
+        textView.append("   " + password);
         regEmail = email;
         regPassword = password;
     }
-
-
 
 
     @Override
@@ -116,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         animationDrawable.setEnterFadeDuration(4500);
         animationDrawable.setExitFadeDuration(4500);
         animationDrawable.start();
+        //ProgressBar
+        progressBar = findViewById(R.id.progress);
 
 
         loginFragment();
@@ -131,14 +146,14 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
     }
 
 
-
-
-    public void Change (View view){
+    public void Change(View view) {
 
         fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
 
-        switch (view.getId()){
+        Sprite ThreeBounce = new ThreeBounce();
+
+        switch (view.getId()) {
 
             case R.id.back:
                 fragmentTransaction.setCustomAnimations(R.anim.enter_right_to_left, R.anim.exit_right_to_left)
@@ -164,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                         .replace(R.id.frameLayout, fragment2)
                         .commit();
 
+
                 registerFragment();
 
                 Animation b = AnimationUtils.loadAnimation(this, R.anim.button_left_to_right);
@@ -179,28 +195,31 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                 break;
             case R.id.sign_in:
                 loginFragment();
+                //progress bar
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setIndeterminateDrawable(ThreeBounce);
 
                 mListener.onActivityDataListener();
-                if (!glEmail.equals("")& (!glPassword.equals(""))) {
+                if (!glEmail.equals("") & (!glPassword.equals(""))) {
                     signin(glEmail, glPassword);
 
                 }
                 break;
             case R.id.sign_up_regis:
                 rListener.onActivityDataListenerRegister();
-                if (!regEmail.equals("")& (!regPassword.equals(""))) {
-                   registration(regEmail, regPassword);
+                if (!regEmail.equals("") & (!regPassword.equals(""))) {
+                    registration(regEmail, regPassword);
                 }
                 break;
             case R.id.skip:
                 goToActive(WorkActivity.class);
-                default:
-                    break;
+            default:
+                break;
         }
 
     }
 
-    public void registration (String email, String password){
+    public void registration(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -209,13 +228,13 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                           // updateUI(user);
+                            // updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                           // updateUI(null);
+                            // updateUI(null);
                         }
 
                         // ...
@@ -223,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                 });
     }
 
-    public void signin(String email, String password){
+    public void signin(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -234,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
                             Toast.makeText(MainActivity.this, "signInWithEmail:success",
                                     Toast.LENGTH_SHORT).show();
                             goToActive(WorkActivity.class);
+                            progressBar.setVisibility(View.INVISIBLE);
 
                             FirebaseUser user = mAuth.getCurrentUser();
                             // updateUI(user);
@@ -270,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         }
     }
 
-    public void registerFragment(){
+    public void registerFragment() {
         FragmentManager fm = getSupportFragmentManager();
 
         Fragment fragment = fm.findFragmentById(R.id.fragmentRegistration);
@@ -290,11 +310,27 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         }
     }
 
-    public void goToActive(Class activity){
+    public void goToActive(Class activity) {
         Intent intent = new Intent(this, activity);
         startActivity(intent);
         Animatoo.animateFade(this);
+
+
     }
+
+
+    @SuppressLint("MissingPermission")
+    public String getDeviceID() {
+        String deviceId;
+        TelephonyManager mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (mTelephony.getDeviceId() != null) {
+            deviceId = mTelephony.getDeviceId();
+        } else {
+            deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
+        return deviceId;
+    }
+
 }
 
 

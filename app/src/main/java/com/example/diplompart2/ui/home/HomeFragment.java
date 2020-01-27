@@ -9,21 +9,28 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 
+import com.example.diplompart2.MainActivity;
 import com.example.diplompart2.R;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.StaticFragment1;
+import com.example.diplompart2.login_regist.fragment_login;
 import com.example.diplompart2.test_class.DataSource;
 import com.example.diplompart2.test_class.Task;
 import com.example.myloadingbutton.MyLoadingButton;
 import com.marozzi.roundbutton.RoundButton;
 
+
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -33,14 +40,16 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick, RoundButton.RoundButtonAnimationListener {
+public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick {
+
+    Fragment fragmentStatic1, frag;
 
     private HomeViewModel homeViewModel;
     private static final String TAG = "MaimActivity";
-    private TextView thread1;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private MyLoadingButton myLoadingButton;
-    private RoundButton btn;
+
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -48,15 +57,12 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        btn = root.findViewById(R.id.bt);
+
         myLoadingButton = root.findViewById(R.id.my_loading_button);
         final TextView textView = root.findViewById(R.id.text_home);
-        final TextView second = root.findViewById(R.id.second);
-        thread1 = root.findViewById(R.id.thread);
         myLoadingButton.setMyButtonClickListener(this);
-        btn.setButtonAnimationListener(this);
 
-
+        fragmentStatic1 = new StaticFragment1();
 
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
@@ -89,7 +95,6 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
                     public boolean test(String s) throws Exception {
                         Thread.sleep(1000);
                         Log.d(TAG, "test: " + s + " " + Thread.currentThread().getName());
-                        second.setText("test: " + s + " " + Thread.currentThread().getName());
                         return s.toLowerCase().startsWith("b");
                     }
                 })
@@ -122,8 +127,11 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
 
 
+
         return root;
     }
+
+
 
 
 
@@ -194,23 +202,4 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
     }
 
 
-    @Override
-    public void onRevertMorphingEnd() {
-        btn.startAnimation();
-    }
-
-    @Override
-    public void onApplyMorphingEnd() {
-
-    }
-
-    @Override
-    public void onShowProgress() {
-
-    }
-
-    @Override
-    public void onShowResultState() {
-
-    }
 }

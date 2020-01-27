@@ -18,80 +18,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/second"
-        android:layout_width="398dp"
-        android:layout_height="24dp"
-        android:text="TextView"
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.example.diplompart2.analyze_fragments.static_analyze_1.StaticFragment1"
+        android:layout_width="361dp"
+        android:layout_height="144dp"
+        android:layout_marginTop="56dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_home" />
-
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="362dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/second" />
-
-    <TextView
-        android:id="@+id/thread"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
-
 
     <com.example.myloadingbutton.MyLoadingButton
         android:id="@+id/my_loading_button"
         android:layout_width="319dp"
         android:layout_height="60dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="263dp"
+        android:layout_marginBottom="402dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thread"
+        app:layout_constraintTop_toBottomOf="@+id/text_home"
         app:mlb_animationDuration="300"
         app:mlb_backgroundColor="#FF6D00"
         app:mlb_label="Start testing"
+
         app:mlb_labelColor="#ffffff"
         app:mlb_labelSize="10sp"
         app:mlb_loaderColor="#ffffff"
-        app:mlb_setNormalAfterError="false"
-
-        />
-
-    <com.marozzi.roundbutton.RoundButton
-        android:id="@+id/bt"
-        android:layout_width="88dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:text="Test"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thread"
-        app:rb_animation_alpha="false"
-        app:rb_animation_corner_radius="20dp"
-        app:rb_animation_duration="500"
-        app:rb_animation_progress_color="@color/colorAccent"
-        app:rb_animation_progress_padding="8dp"
-        app:rb_animation_progress_style="dots"
-        app:rb_animation_progress_width="2dp"
-        app:rb_background_color="@android:color/transparent"
-        app:rb_background_color_pressed="@color/colorPrimary"
-        app:rb_corner_color="@color/colorPrimary"
-        app:rb_corner_color_pressed="@color/colorPrimary"
-        app:rb_corner_radius="2dp"
-        app:rb_corner_width="1dp"
-        app:rb_text_color="@color/colorPrimary"
-        app:rb_text_color_pressed="@android:color/white" />
+        app:mlb_setNormalAfterError="false" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
