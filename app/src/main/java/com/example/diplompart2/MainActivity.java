@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -131,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         animationDrawable.start();
         //ProgressBar
         progressBar = findViewById(R.id.progress);
-
 
         loginFragment();
 
@@ -319,17 +317,7 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
     }
 
 
-    @SuppressLint("MissingPermission")
-    public String getDeviceID() {
-        String deviceId;
-        TelephonyManager mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (mTelephony.getDeviceId() != null) {
-            deviceId = mTelephony.getDeviceId();
-        } else {
-            deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        }
-        return deviceId;
-    }
+
 
 }
 

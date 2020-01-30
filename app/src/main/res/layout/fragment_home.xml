@@ -19,17 +19,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <fragment
-        android:id="@+id/fragment"
-        android:name="com.example.diplompart2.analyze_fragments.static_analyze_1.StaticFragment1"
-        android:layout_width="361dp"
-        android:layout_height="144dp"
-        android:layout_marginTop="56dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_home" />
-
     <com.example.myloadingbutton.MyLoadingButton
         android:id="@+id/my_loading_button"
         android:layout_width="319dp"
@@ -47,7 +36,20 @@
         app:mlb_labelColor="#ffffff"
         app:mlb_labelSize="10sp"
         app:mlb_loaderColor="#ffffff"
-        app:mlb_setNormalAfterError="false" />
+        app:mlb_setNormalAfterError="false" >
+
+    </com.example.myloadingbutton.MyLoadingButton>
+
+    <FrameLayout
+        android:id="@+id/StaticFrameLayout"
+        android:layout_width="0dp"
+        android:layout_height="163dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_home">
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

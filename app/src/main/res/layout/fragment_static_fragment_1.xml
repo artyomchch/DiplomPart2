@@ -2,23 +2,33 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stat1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginBottom="10dp"
+
+    android:alpha="1"
+    android:background="@drawable/fragment_bg_wait"
     android:paddingBottom="10dp"
     tools:context=".analyze_fragments.static_analyze_1.StaticFragment1">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:alpha="1"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp">
 
             <TextView
                 android:id="@+id/rootView"
-                android:layout_width="159dp"
+                android:layout_width="196dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="30dp"
@@ -28,7 +38,7 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
+                android:layout_width="35dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingTop="10dp"
@@ -54,7 +64,8 @@
                 <TextView
                     android:id="@+id/modelText"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="TextView" />
             </TableRow>
@@ -74,6 +85,7 @@
                     android:id="@+id/modelVersion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="TextView" />
             </TableRow>
@@ -93,6 +105,7 @@
                     android:id="@+id/IMEI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="TextView" />
             </TableRow>

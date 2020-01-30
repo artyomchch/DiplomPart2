@@ -1,12 +1,16 @@
 package com.example.diplompart2.ui.home;
 
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -42,12 +47,17 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick {
 
+    // Fragments
     Fragment fragmentStatic1, frag;
+    FragmentTransaction fragmentTransaction;
+
 
     private HomeViewModel homeViewModel;
+    private final static String FIRST_FRAG_TAG = "f1";
     private static final String TAG = "MaimActivity";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private MyLoadingButton myLoadingButton;
+    private FragmentManager fragmentManager;
 
 
 
@@ -57,12 +67,7 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-
-        myLoadingButton = root.findViewById(R.id.my_loading_button);
         final TextView textView = root.findViewById(R.id.text_home);
-        myLoadingButton.setMyButtonClickListener(this);
-
-        fragmentStatic1 = new StaticFragment1();
 
         homeViewModel.getText().observe(this, new Observer<String>() {
             @Override
@@ -71,6 +76,13 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
             }
         });
 
+        //Loading button
+        myLoadingButton = root.findViewById(R.id.my_loading_button);
+        myLoadingButton.setMyButtonClickListener(this);
+
+
+        //fragments
+       fragmentStatic1 = new StaticFragment1();
 
 
 
@@ -78,8 +90,6 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
 
         //that's example one more
-
-
         Observable<String> animalsObservable = getAnimalsObservable();
 
         DisposableObserver<String> animalsObserver = getAnimalsObserver();
@@ -89,7 +99,6 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         compositeDisposable.add(
                 animalsObservable
                 .subscribeOn(Schedulers.io())
-
                 .filter(new Predicate<String>() {
                     @Override
                     public boolean test(String s) throws Exception {
@@ -190,16 +199,35 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
     @Override
     public void onMyLoadingButtonClick() {
+
         myLoadingButton.showLoadingButton();
         Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.button_go_down);
         myLoadingButton.setY(1700);
         myLoadingButton.setAnimation(a);
 
-       // ConstraintLayout.LayoutParams linnear_lay = new ConstraintLayout.LayoutParams(320,600);
+        loadFragments();
 
-        //myLoadingButton.setLayoutParams(new ConstraintLayout.LayoutParams());
+
 
     }
+
+
+
+    public void loadFragments(){
+        fragmentTransaction = getChildFragmentManager()
+                .beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.fade_in_custom, android.R.anim.fade_out)
+                .replace(R.id.StaticFrameLayout, fragmentStatic1)
+                .commit();
+
+    }
+
+
+
+
+
+
+
 
 
 }
