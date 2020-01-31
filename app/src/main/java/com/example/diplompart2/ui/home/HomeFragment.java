@@ -1,5 +1,7 @@
 package com.example.diplompart2.ui.home;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,12 +32,15 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.diplompart2.MainActivity;
 import com.example.diplompart2.R;
 import com.example.diplompart2.analyze_fragments.static_analyze_1.StaticFragment1;
+import com.example.diplompart2.analyze_fragments.static_analyze_2.StaticAnalyze2;
 import com.example.diplompart2.login_regist.fragment_login;
 import com.example.diplompart2.test_class.DataSource;
 import com.example.diplompart2.test_class.Task;
 import com.example.myloadingbutton.MyLoadingButton;
 import com.marozzi.roundbutton.RoundButton;
 
+
+import java.util.Objects;
 
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -47,8 +54,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick {
 
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
+    private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 100;
     // Fragments
-    Fragment fragmentStatic1, frag;
+    Fragment fragmentStatic1, fragmentStatic2;
     FragmentTransaction fragmentTransaction;
 
 
@@ -83,9 +92,19 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
         //fragments
        fragmentStatic1 = new StaticFragment1();
+       fragmentStatic2 = new StaticAnalyze2();
 
 
-
+       //Check Permission
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()),
+                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_READ_PHONE_STATE); // разрешение не предоставлено
+        }
+        else {
+            // разрешение предоставлено
+        }
 
 
 
@@ -217,9 +236,10 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         fragmentTransaction = getChildFragmentManager()
                 .beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fade_in_custom, android.R.anim.fade_out)
-                .replace(R.id.StaticFrameLayout, fragmentStatic1)
+                .replace(R.id.StaticFrameLayout, fragmentStatic1);
+        fragmentTransaction.setCustomAnimations(R.anim.fade_in_custom, android.R.anim.fade_out)
+                .replace(R.id.StaticFrameLayout2, fragmentStatic2)
                 .commit();
-
     }
 
 
