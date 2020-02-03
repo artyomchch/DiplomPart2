@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +26,18 @@ import android.widget.TextView;
 
 import com.example.diplompart2.MainActivity;
 import com.example.diplompart2.R;
+import com.google.android.gms.common.data.DataBufferObserver;
+import com.google.common.base.Stopwatch;
 
 import java.io.File;
 import java.util.Objects;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 import static androidx.core.content.ContextCompat.startActivities;
@@ -44,6 +54,10 @@ public class StaticFragment1 extends Fragment {
     private FrameLayout FrameStat1;
     // ImageView
     ImageView RootView;
+    //boolRoot
+    private Boolean BoolRoot;
+    //Imei
+    private String getIMEI;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -51,6 +65,7 @@ public class StaticFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_static_fragment_1, container, false);
+
 
         //TextView
         model = root.findViewById(R.id.modelText);
@@ -62,17 +77,16 @@ public class StaticFragment1 extends Fragment {
         // ImageView
         RootView = root.findViewById(R.id.rootImage);
 
-        //get manafacture ..
-        manafacture();
 
 
         //animation
-        animationDrawable = (AnimationDrawable) FrameStat1.getBackground();
-        animationDrawable.setEnterFadeDuration(1500);
-        animationDrawable.setExitFadeDuration(1500);
-        animationDrawable.start();
+        animation();
 
-
+        //get manafacture ..
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        returnData();
+        stopwatch.stop();
+        Log.e("first task", "onCreateView: " + stopwatch );
 
         return root;
 
@@ -81,24 +95,71 @@ public class StaticFragment1 extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
-    private void manafacture(){
-        model.setText(Build.MANUFACTURER + " " + Build.MODEL);
-        version.setText("Android " +Build.VERSION.RELEASE);
+    private int manafacture(Integer integer){
 
+        Stopwatch stopwatch = Stopwatch.createStarted();
         TelephonyManager telephonyManager = (TelephonyManager) Objects.requireNonNull(getContext()).
                 getSystemService(Context.TELEPHONY_SERVICE);
         assert telephonyManager != null;
-        imei.setText(telephonyManager.getImei(0));
-        if (!isRooted()){
+        getIMEI = telephonyManager.getImei(0);
+        //imei.setText(telephonyManager.getImei(0));
+        BoolRoot = isRooted();
+        stopwatch.stop();
+        Log.e("first task get Imei", "manafacture: " + stopwatch  + "  ->  "+ Thread.currentThread().getName());
+        return integer;
+    }
+
+    private void animation() {
+        animationDrawable = (AnimationDrawable) FrameStat1.getBackground();
+        animationDrawable.setEnterFadeDuration(1500);
+        animationDrawable.setExitFadeDuration(1500);
+        animationDrawable.start();
+    }
+
+    private int setTextValue(Integer integer){
+
+
+        model.setText(Build.MANUFACTURER + " " + Build.MODEL);
+        version.setText("Android " +Build.VERSION.RELEASE);
+        imei.setText(getIMEI);
+        if (!BoolRoot){
             RootView.setImageResource(R.drawable.quit);
         }
+        FrameStat1.setBackground(Objects.requireNonNull(getContext())
+                .getDrawable(R.drawable.fragment_bg));
+        animation();
 
 
+        return integer;
 
     }
 
+    private void returnData(){
+        Observable.just(1)
+                .subscribeOn(Schedulers.io())
+                .doOnNext(this::manafacture)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(this::setTextValue)
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
 
+                    @Override
+                    public void onNext(Integer integer) {
 
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
 }

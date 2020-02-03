@@ -1,72 +1,55 @@
 package com.example.diplompart2.ui.home;
 
 import android.Manifest;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 
-import com.example.diplompart2.MainActivity;
 import com.example.diplompart2.R;
 import com.example.diplompart2.analyze_fragments.static_analyze_1.StaticFragment1;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.StaticAnalyze2;
-import com.example.diplompart2.login_regist.fragment_login;
-import com.example.diplompart2.test_class.DataSource;
-import com.example.diplompart2.test_class.Task;
+import com.example.diplompart2.analyze_fragments.strings.StringsApp;
 import com.example.myloadingbutton.MyLoadingButton;
-import com.marozzi.roundbutton.RoundButton;
+import com.google.common.base.Stopwatch;
 
 
+import java.util.List;
 import java.util.Objects;
 
-import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick {
 
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 100;
     // Fragments
-    Fragment fragmentStatic1, fragmentStatic2;
-    FragmentTransaction fragmentTransaction;
+    private Fragment fragmentStatic1, fragmentStatic2;
+    private FragmentTransaction fragmentTransaction;
 
 
     private HomeViewModel homeViewModel;
-    private final static String FIRST_FRAG_TAG = "f1";
     private static final String TAG = "MaimActivity";
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private MyLoadingButton myLoadingButton;
-    private FragmentManager fragmentManager;
 
 
 
@@ -89,132 +72,23 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         myLoadingButton = root.findViewById(R.id.my_loading_button);
         myLoadingButton.setMyButtonClickListener(this);
 
-
         //fragments
        fragmentStatic1 = new StaticFragment1();
        fragmentStatic2 = new StaticAnalyze2();
 
 
-       //Check Permission
-        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()),
-                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
-                    new String[]{Manifest.permission.READ_PHONE_STATE},
-                    MY_PERMISSIONS_REQUEST_READ_PHONE_STATE); // разрешение не предоставлено
-        }
-        else {
-            // разрешение предоставлено
-        }
 
-
-
-        //that's example one more
-        Observable<String> animalsObservable = getAnimalsObservable();
-
-        DisposableObserver<String> animalsObserver = getAnimalsObserver();
-
-        DisposableObserver<String> animalsObserverAllCaps = getAnimalsAllCapsObserver();
-
-        compositeDisposable.add(
-                animalsObservable
-                .subscribeOn(Schedulers.io())
-                .filter(new Predicate<String>() {
-                    @Override
-                    public boolean test(String s) throws Exception {
-                        Thread.sleep(1000);
-                        Log.d(TAG, "test: " + s + " " + Thread.currentThread().getName());
-                        return s.toLowerCase().startsWith("b");
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(animalsObserver));
-
-
-        compositeDisposable.add(
-                animalsObservable
-                .subscribeOn(Schedulers.io())
-                .filter(new Predicate<String>() {
-                    @Override
-                    public boolean test(String s) throws Exception {
-                       // Thread.sleep(1000);
-                        Log.d(TAG, "test: " + s + " " + Thread.currentThread().getName());
-                        //thread1.setText("test: " + s + " " + Thread.currentThread().getName());
-                        return s.toLowerCase().startsWith("c");
-                    }
-                })
-                .map(new Function<String, String>() {
-
-                    @Override
-                    public String apply(String s) throws Exception {
-                        return s.toUpperCase();
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(animalsObserverAllCaps));
-
-
-
+        //multiThread
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        multiThread();
+        stopwatch.stop();
+        Log.e(TAG, "enter task: " + stopwatch );
 
 
         return root;
     }
 
 
-
-
-
-    private DisposableObserver<String> getAnimalsObserver() {
-        return new DisposableObserver<String>() {
-            @Override
-            public void onNext(String s) {
-                Log.d(TAG, "Name: " + s + " " + Thread.currentThread().getName());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "onError: " + e.getMessage());
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "All items are emitted!");
-            }
-        };
-    }
-
-
-    private DisposableObserver<String> getAnimalsAllCapsObserver(){
-        return new DisposableObserver<String>() {
-            @Override
-            public void onNext(String s) {
-                Log.d(TAG, "Name: " + s + " " + Thread.currentThread().getName());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "onError: " + e.getMessage());
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "All items are emitted!");
-            }
-        };
-    }
-
-    private Observable<String> getAnimalsObservable() {
-        return Observable.fromArray(
-                "Ant", "Ape",
-                "Bat", "Bee", "Bear", "Butterfly",
-                "Cat", "Crab", "Cod",
-                "Dog", "Dove",
-                "Fox", "Frog");
-    }
-    @Override
-     public void onDestroy() {
-        super.onDestroy();
-        compositeDisposable.clear();
-    }
 
     @Override
     public void onMyLoadingButtonClick() {
@@ -227,12 +101,10 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         loadFragments();
 
 
-
     }
 
 
-
-    public void loadFragments(){
+    private void loadFragments(){
         fragmentTransaction = getChildFragmentManager()
                 .beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fade_in_custom, android.R.anim.fade_out)
@@ -242,12 +114,64 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
                 .commit();
     }
 
+    private int setGlobalStrings(Integer integer){
+        //Check Permission
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()),
+                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_READ_PHONE_STATE); // разрешение не предоставлено
+        }
+        else {
+            // разрешение предоставлено
+        }
 
 
+        StringsApp sa = new StringsApp();
+        sa.setCountOfApp(countOfApp()); // кол-во отфильрованных приложений
 
+        sa.setPackageList(Objects.requireNonNull(getActivity()).getPackageManager()
+                .getInstalledPackages(0));  // кол-во всего приложений
+        Log.d("Threads", Thread.currentThread().getName());
+        return integer;
+    }
 
+    //Кол-во отфильтрованных приложений
+    private int countOfApp(){
+        List<PackageInfo> packagelist = Objects.requireNonNull(getActivity()).getPackageManager().
+                getInstalledPackages(0);
+        int k= 0;
+        for (int i= 0; i < packagelist.size(); i++){
+            PackageInfo packageInfo=packagelist.get(i);
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM)== 0){
+                k++;
+            }
+        }
 
+        return k;
+    }
 
+    private void multiThread(){
+        Observable.just(1)
+                .subscribeOn(Schedulers.io())
+                .doOnNext(this::setGlobalStrings)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<Integer>() {
+                    @Override
+                    public void onNext(Integer integer) {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
 
 }
