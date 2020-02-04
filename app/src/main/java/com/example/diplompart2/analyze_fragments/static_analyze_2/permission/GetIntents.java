@@ -8,7 +8,8 @@ import java.util.jar.JarFile;
 import static com.example.diplompart2.analyze_fragments.static_analyze_2.permission.AndroidDecompress.decompressXML;
 
 public class GetIntents {
-    public String getIntents(String path, String XMLFile) {
+    public String getIntents(String path) {
+        String XMLFile = "";
         try {
             JarFile jf = new JarFile(path);
             InputStream is = jf.getInputStream(jf.getEntry("AndroidManifest.xml"));

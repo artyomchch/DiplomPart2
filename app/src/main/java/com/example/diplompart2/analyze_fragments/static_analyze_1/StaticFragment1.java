@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +14,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -26,6 +28,8 @@ import android.widget.TextView;
 
 import com.example.diplompart2.MainActivity;
 import com.example.diplompart2.R;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1Database;
+import com.example.diplompart2.analyze_fragments.static_analyze_2.TypeAtribute;
 import com.google.android.gms.common.data.DataBufferObserver;
 import com.google.common.base.Stopwatch;
 
@@ -47,17 +51,22 @@ import static com.example.diplompart2.analyze_fragments.static_analyze_1.check_r
 public class StaticFragment1 extends Fragment {
 
     //TextView ..
-    private TextView model, rootT , version, imei;
+    private TextView model, version, imei;
     // Animation
     private AnimationDrawable animationDrawable;
     // FrameLayout
     private FrameLayout FrameStat1;
     // ImageView
-    ImageView RootView;
+    private ImageView RootView;
     //boolRoot
-    private Boolean BoolRoot;
+    private Boolean boolRoot;
     //Imei
     private String getIMEI;
+    //model
+    private String getModel;
+    //version
+    private String getVersion;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -67,17 +76,15 @@ public class StaticFragment1 extends Fragment {
         View root = inflater.inflate(R.layout.fragment_static_fragment_1, container, false);
 
 
+
         //TextView
         model = root.findViewById(R.id.modelText);
         version = root.findViewById(R.id.modelVersion);
         imei = root.findViewById(R.id.IMEI);
-        rootT =root.findViewById(R.id.rootView);
         // FrameLayout
         FrameStat1 = root.findViewById(R.id.stat1);
         // ImageView
         RootView = root.findViewById(R.id.rootImage);
-
-
 
         //animation
         animation();
@@ -101,11 +108,16 @@ public class StaticFragment1 extends Fragment {
         TelephonyManager telephonyManager = (TelephonyManager) Objects.requireNonNull(getContext()).
                 getSystemService(Context.TELEPHONY_SERVICE);
         assert telephonyManager != null;
-        getIMEI = telephonyManager.getImei(0);
+        getIMEI = telephonyManager.getImei(0); // номер imei
         //imei.setText(telephonyManager.getImei(0));
-        BoolRoot = isRooted();
+        boolRoot = isRooted(); // есть ли рут
+        getModel = Build.MANUFACTURER + " " + Build.MODEL;
+        getVersion = "Android " +Build.VERSION.RELEASE;
         stopwatch.stop();
         Log.e("first task get Imei", "manafacture: " + stopwatch  + "  ->  "+ Thread.currentThread().getName());
+
+
+
         return integer;
     }
 
@@ -118,11 +130,11 @@ public class StaticFragment1 extends Fragment {
 
     private int setTextValue(Integer integer){
 
-
-        model.setText(Build.MANUFACTURER + " " + Build.MODEL);
-        version.setText("Android " +Build.VERSION.RELEASE);
+        model.setText(getModel);
+        version.setText(getVersion);
         imei.setText(getIMEI);
-        if (!BoolRoot){
+        TypeAtributes1 ta1 = new TypeAtributes1(getModel, getIMEI, getVersion, boolRoot);
+        if (!boolRoot){
             RootView.setImageResource(R.drawable.quit);
         }
         FrameStat1.setBackground(Objects.requireNonNull(getContext())
@@ -161,5 +173,10 @@ public class StaticFragment1 extends Fragment {
 
                     }
                 });
+    }
+
+    private void room(){
+        EmployeeStatic1Database db = Room.databaseBuilder(Objects.requireNonNull(getContext()).getApplicationContext(),
+                EmployeeStatic1Database.class, "database").build();
     }
 }

@@ -1,8 +1,11 @@
 package com.example.diplompart2.analyze_fragments.static_analyze_2;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,6 +18,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.diplompart2.R;
+import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.GetIntents;
+import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.GetPermission;
 import com.example.diplompart2.analyze_fragments.strings.StringsApp;
 import com.google.common.base.Stopwatch;
 
@@ -31,20 +36,22 @@ import io.reactivex.schedulers.Schedulers;
 
 public class StaticAnalyze2 extends Fragment {
 
-    //CompositeDisposable
-    private CompositeDisposable disposable = new CompositeDisposable();
     //TAG observable static 2
     private static String TAG = "Observable Static 2";
-    //TextView
+    //TextViews
     private TextView CountApp, ProcApp;
+    //Drawable
+    Drawable appIcon;
+    //Strings of app
+    private String appName, appFullName, appPatch, appVersion;
     // Animation
     private AnimationDrawable animationDrawable;
     // FrameLayout
     private FrameLayout FrameStat2;
-    //PackageList
-    //List<PackageInfo> packagelist;
     //GlobalStrings
     StringsApp sa = new StringsApp();
+    //Some xml file in String var
+    private String xmlString;
     //Counter
     private static int i;
 
@@ -60,18 +67,12 @@ public class StaticAnalyze2 extends Fragment {
         ProcApp = root.findViewById(R.id.processedApp);
         // FrameLayout
         FrameStat2 = root.findViewById(R.id.stat2);
-
         //animation
         animation();
         //countApp
         CountApp.setText(String.valueOf(sa.getCountOfApp()));
-        //packageList
-       // List<PackageInfo> mypck;
-
-       // packagelist = Objects.requireNonNull(getActivity()).getPackageManager()
-        //        .getInstalledPackages(0);
-      //  mypck = packagelist;
-
+        ProcApp.setText("0 / "+ String.valueOf(sa.getCountOfApp()) + " -> main");
+        //stopwatch
         Stopwatch stopwatch = Stopwatch.createStarted();
         mainTask();
         stopwatch.stop();
@@ -92,29 +93,36 @@ public class StaticAnalyze2 extends Fragment {
 
     }
     //Главная задача
-    private int idk(Integer num){
+    private int mainVoid(Integer num) throws PackageManager.NameNotFoundException {
         PackageInfo packageInfo=sa.getPackageList().get(num);
         //StringsApp of app
-        String appName = packageInfo.applicationInfo.loadLabel(Objects.requireNonNull(getActivity())
+        appName = packageInfo.applicationInfo.loadLabel(Objects.requireNonNull(getActivity())
                 .getPackageManager()).toString();  // Название приложения
-        String appPatch = packageInfo.applicationInfo.sourceDir; // путь к приложению
-        String appFullName = packageInfo.packageName; //тех. названия приложения
-        String appVersion = packageInfo.versionName;  //версия приложения
+        Log.d(TAG, "App Name: " + appName);
+        appPatch = packageInfo.applicationInfo.sourceDir; // путь к приложению
+        appFullName = packageInfo.packageName; //тех. названия приложения
+        appVersion = packageInfo.versionName;  //версия приложения
+        appIcon = getActivity().getPackageManager().getApplicationIcon(appFullName); // получение иконки
+
+        //get Intents of app and normal view of xml file manifest
+        GetIntents getIntents = new GetIntents();
+        String notNormalPermissionView = getIntents.getIntents(appPatch);
+        //get normal permission view
+        GetPermission getPermission = new GetPermission();
+        getPermission.getPermission(notNormalPermissionView);
 
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(appName + " " + appPatch + " " + appFullName + " " + appVersion + "\n");
+
+
+
+      //  StringBuilder stringBuilder = new StringBuilder();
+      //  stringBuilder.append(appName + " " + appPatch + " " + appFullName + " " + appVersion + "\n");
 
         try {
-            Thread.sleep(20);
+            Thread.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-       // ProcApp.setText(stringBuilder);
-       // i++;
-    //    Log.e(TAG, i + "   ->   " + num + ") " + stringBuilder + " "+ Thread.currentThread().getName());
-
-
 
         return num;
     }
@@ -137,7 +145,6 @@ public class StaticAnalyze2 extends Fragment {
         //permission
         Observable.range(1, sa.getPackageList().size())
                 .subscribeOn(Schedulers.computation())
-                .doOnNext(this::idk)
                 .filter(new Predicate<Integer>() {   // Фильтр не нужных приложений
                     @Override
                     public boolean test(Integer integer) throws Exception {
@@ -145,6 +152,7 @@ public class StaticAnalyze2 extends Fragment {
                         return (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0 ;
                     }
                 })
+                .doOnNext(this::mainVoid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(this::setText)
                 .subscribe(new DisposableObserver<Integer>  () {

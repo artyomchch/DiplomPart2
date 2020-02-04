@@ -49,11 +49,13 @@ dependencies {
     // butterKnife
     implementation 'com.jakewharton:butterknife:10.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
-    // buttons
     //progressbar
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     //guava (StopWatch)
     implementation "com.google.guava:guava:28.2-android"
+    //room
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 
 
 }
