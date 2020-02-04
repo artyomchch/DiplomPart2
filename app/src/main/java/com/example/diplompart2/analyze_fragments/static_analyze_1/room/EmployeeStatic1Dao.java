@@ -3,6 +3,7 @@ package com.example.diplompart2.analyze_fragments.static_analyze_1.room;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -17,7 +18,7 @@ public interface EmployeeStatic1Dao {
     @Query("SELECT * FROM employeestatic1 WHERE staticId = :id")
     EmployeeStatic1 getById(long id);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(EmployeeStatic1 employeeStatic1);
 
     @Update

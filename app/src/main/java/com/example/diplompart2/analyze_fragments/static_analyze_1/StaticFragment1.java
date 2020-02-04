@@ -28,12 +28,16 @@ import android.widget.TextView;
 
 import com.example.diplompart2.MainActivity;
 import com.example.diplompart2.R;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.room.App;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1Dao;
 import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1Database;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.TypeAtribute;
 import com.google.android.gms.common.data.DataBufferObserver;
 import com.google.common.base.Stopwatch;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observable;
@@ -116,7 +120,8 @@ public class StaticFragment1 extends Fragment {
         stopwatch.stop();
         Log.e("first task get Imei", "manafacture: " + stopwatch  + "  ->  "+ Thread.currentThread().getName());
 
-
+        //database
+        room();
 
         return integer;
     }
@@ -176,7 +181,23 @@ public class StaticFragment1 extends Fragment {
     }
 
     private void room(){
-        EmployeeStatic1Database db = Room.databaseBuilder(Objects.requireNonNull(getContext()).getApplicationContext(),
-                EmployeeStatic1Database.class, "database").build();
+
+        EmployeeStatic1Database db = App.getInstance().getDatabase(); // получение базы данных
+        EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
+
+        //передаем в таблицу
+        EmployeeStatic1 employeeStatic1 = new EmployeeStatic1();
+        employeeStatic1.staticId = 1;
+        employeeStatic1.root = boolRoot;
+        employeeStatic1.model = getModel;
+        employeeStatic1.system = getVersion;
+        employeeStatic1.imei = getIMEI;
+        Log.d("ds", "room: check  " + Thread.currentThread().getName());
+        employeeStatic1Dao.insert(employeeStatic1);
+        Log.d("ds", "room: second check" + Thread.currentThread().getName());
+        List<EmployeeStatic1> employees = employeeStatic1Dao.getAll();
+        Log.e("Database", "room: " + employees );
+
+
     }
 }

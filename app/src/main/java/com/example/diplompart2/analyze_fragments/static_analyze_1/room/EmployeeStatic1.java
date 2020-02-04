@@ -9,7 +9,7 @@ public class EmployeeStatic1 {
     @PrimaryKey
     public int staticId;
 
-    public String root;
+    public Boolean root;
 
     public String model;
 
