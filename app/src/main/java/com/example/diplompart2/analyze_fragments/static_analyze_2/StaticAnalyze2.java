@@ -4,10 +4,16 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -15,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.diplompart2.R;
@@ -23,6 +30,8 @@ import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.Get
 import com.example.diplompart2.analyze_fragments.strings.StringsApp;
 import com.google.common.base.Stopwatch;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,12 +45,15 @@ import io.reactivex.schedulers.Schedulers;
 
 public class StaticAnalyze2 extends Fragment {
 
+    private byte[] app;
     //TAG observable static 2
     private static String TAG = "Observable Static 2";
     //TextViews
     private TextView CountApp, ProcApp;
+    //ArrayList
+    private ArrayList<String> appPermission = new ArrayList<>();
     //Drawable
-    Drawable appIcon;
+    private Drawable appIcon;
     //Strings of app
     private String appName, appFullName, appPatch, appVersion;
     // Animation
@@ -78,6 +90,9 @@ public class StaticAnalyze2 extends Fragment {
         stopwatch.stop();
         Log.e("second Task", "onCreateView: " + stopwatch );
 
+
+
+
         return root;
     }
 
@@ -103,13 +118,24 @@ public class StaticAnalyze2 extends Fragment {
         appFullName = packageInfo.packageName; //тех. названия приложения
         appVersion = packageInfo.versionName;  //версия приложения
         appIcon = getActivity().getPackageManager().getApplicationIcon(appFullName); // получение иконки
+        app = appDrawToByte(appIcon); // получение иконки в байтовой версии
+        Log.d(TAG, "mainVoid: ");
+
+
+
+
+
+
+        //ByteArrayOutputStream stream = new ByteArrayOutputStream();
+       // bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
 
         //get Intents of app and normal view of xml file manifest
         GetIntents getIntents = new GetIntents();
         String notNormalPermissionView = getIntents.getIntents(appPatch);
         //get normal permission view
         GetPermission getPermission = new GetPermission();
-        getPermission.getPermission(notNormalPermissionView);
+        appPermission = getPermission.getPermission(notNormalPermissionView); // Список разрешений
 
 
 
@@ -118,11 +144,11 @@ public class StaticAnalyze2 extends Fragment {
       //  StringBuilder stringBuilder = new StringBuilder();
       //  stringBuilder.append(appName + " " + appPatch + " " + appFullName + " " + appVersion + "\n");
 
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(10);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         return num;
     }
@@ -175,6 +201,26 @@ public class StaticAnalyze2 extends Fragment {
                     }
                 });
     }
+    //база данных (локальная)
+    private void room(){
 
+    }
+    //converter draw to byte[]
+    private byte[] appDrawToByte(Drawable d){
+      // Drawable d; // the drawable (Captain Obvious, to the rescue!!!)
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        getBitmapFromDrawable(d).compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    @NonNull
+    private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
+        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
+    }
 
 }

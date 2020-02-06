@@ -5,7 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public  class GetPermission {
-    public void getPermission(String XML){
+    public ArrayList<String> getPermission(String XML){
         String delimeter = "<uses-permission name=\"";
         String delimeter2 = "<permission";
 
@@ -38,10 +38,7 @@ public  class GetPermission {
         }
         for (int i = 0; i < finList.size(); i++){
             Log.e("perm: ",   "\n " +  finList.get(i));
-           // System.out.println(i + ") " + finList.get(i));
-            //permissionJSON.add( finList.get(i)); /////////
         }
-
-
+            return finList;
     }
 }

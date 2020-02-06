@@ -15,111 +15,56 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.diplompart2.R;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.room.App;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1Dao;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1Database;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class GalleryFragment extends Fragment {
 
     private GalleryViewModel galleryViewModel;
 
-    EditText et_name, et_password;
-    TextView tv_status;
-    Button btn_login;
-
-    Observable<Boolean> observable;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         galleryViewModel =
                 ViewModelProviders.of(this).get(GalleryViewModel.class);
-
-
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         final TextView textView = root.findViewById(R.id.text_gallery);
 
+        EmployeeStatic1Database db = App.getInstance().getDatabase(); // получение базы данных
+        EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
 
-        et_name = root.findViewById(R.id.et_name);
-        et_password = root.findViewById(R.id.et_password);
-        btn_login = root.findViewById(R.id.btn_login);
-        tv_status = root.findViewById(R.id.tv_status);
+        db.employeeStatic1Dao().getAll2()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableSingleObserver<EmployeeStatic1>() {
+                    @Override
+                    public void onSuccess(EmployeeStatic1 employee) {
+                        textView.setText(employee.model + " " + employee.imei + " " + employee.system+ " " + employee.root);
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        // ...
+                    }
+                });
 
-
-        galleryViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-
-        Observable<String> nameObservable = RxTextView.textChanges(et_name).skip(1).map(new Function<CharSequence, String>() {
-            @Override
-            public String apply(CharSequence charSequence) throws Exception {
-                return charSequence.toString();
-            }
-        });
-
-        Observable<String> passwordObservable = RxTextView.textChanges(et_password).skip(1).map(new Function<CharSequence, String>() {
-            @Override
-            public String apply(CharSequence charSequence) throws Exception {
-                return charSequence.toString();
-            }
-        });
-
-
-        observable = Observable.combineLatest(nameObservable, passwordObservable, new BiFunction<String, String, Boolean>() {
-            @Override
-            public Boolean apply(String s, String s2) throws Exception {
-                return isValidForm(s, s2);
-            }
-        });
-
-        observable.subscribe(new DisposableObserver<Boolean>() {
-            @Override
-            public void onNext(Boolean aBoolean) {
-                updateButton(aBoolean);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
 
 
 
         return root;
     }
 
-    public void updateButton(boolean valid) {
-        if (valid)
-            btn_login.setEnabled(true);
-        else
-            btn_login.setEnabled(false);
-    }
-
-    public boolean isValidForm(String name, String password) {
-        boolean validName = !name.isEmpty();
-
-        if (!validName) {
-            et_name.setError("Please enter valid name");
-        }
-
-        boolean validPass = !password.isEmpty() && password.equals("fuck");
-        if (!validPass) {
-            et_password.setError("Incorrect password");
-        }
-        return validName && validPass;
-    }
 
 }

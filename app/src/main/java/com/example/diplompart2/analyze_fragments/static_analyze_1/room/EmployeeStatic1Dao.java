@@ -9,6 +9,8 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 @Dao
 public interface EmployeeStatic1Dao {
 
@@ -17,6 +19,9 @@ public interface EmployeeStatic1Dao {
 
     @Query("SELECT * FROM employeestatic1 WHERE staticId = :id")
     EmployeeStatic1 getById(long id);
+
+    @Query("SELECT * FROM employeestatic1")
+    Single<EmployeeStatic1> getAll2();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(EmployeeStatic1 employeeStatic1);

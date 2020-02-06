@@ -17,6 +17,8 @@ public class App extends Application {
                 .build();
     }
 
+
+
     public static App getInstance() {
         return instance;
     }

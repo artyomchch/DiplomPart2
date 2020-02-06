@@ -195,8 +195,8 @@ public class StaticFragment1 extends Fragment {
         Log.d("ds", "room: check  " + Thread.currentThread().getName());
         employeeStatic1Dao.insert(employeeStatic1);
         Log.d("ds", "room: second check" + Thread.currentThread().getName());
-        List<EmployeeStatic1> employees = employeeStatic1Dao.getAll();
-        Log.e("Database", "room: " + employees );
+       // List<EmployeeStatic1> employees = employeeStatic1Dao.getAll();
+        //Log.e("Database", "room: " + employees );
 
 
     }
