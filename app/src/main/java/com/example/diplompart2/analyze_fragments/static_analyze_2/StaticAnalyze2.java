@@ -1,15 +1,11 @@
 package com.example.diplompart2.analyze_fragments.static_analyze_2;
 
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -21,24 +17,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.diplompart2.R;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.GetIntents;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.GetPermission;
+import com.example.diplompart2.analyze_fragments.room.Converters;
 import com.example.diplompart2.analyze_fragments.strings.StringsApp;
 import com.google.common.base.Stopwatch;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -51,11 +43,11 @@ public class StaticAnalyze2 extends Fragment {
     //TextViews
     private TextView CountApp, ProcApp;
     //ArrayList
-    private ArrayList<String> appPermission = new ArrayList<>();
+   // private ArrayList<String> appPermission = new ArrayList<>();
     //Drawable
     private Drawable appIcon;
     //Strings of app
-    private String appName, appFullName, appPatch, appVersion;
+    private String appName, appFullName, appPatch, appVersion, appPermissions;
     // Animation
     private AnimationDrawable animationDrawable;
     // FrameLayout
@@ -117,28 +109,23 @@ public class StaticAnalyze2 extends Fragment {
         appPatch = packageInfo.applicationInfo.sourceDir; // путь к приложению
         appFullName = packageInfo.packageName; //тех. названия приложения
         appVersion = packageInfo.versionName;  //версия приложения
-        appIcon = getActivity().getPackageManager().getApplicationIcon(appFullName); // получение иконки
-        app = appDrawToByte(appIcon); // получение иконки в байтовой версии
-        Log.d(TAG, "mainVoid: ");
-
-
-
-
+      //  appIcon = getActivity().getPackageManager().getApplicationIcon(appFullName); // получение иконки
+      //  app = appDrawToByte(appIcon); // получение иконки в байтовой версии
+     //   Log.d(TAG, "mainVoid: ");
 
 
         //ByteArrayOutputStream stream = new ByteArrayOutputStream();
        // bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
 
         //get Intents of app and normal view of xml file manifest
         GetIntents getIntents = new GetIntents();
         String notNormalPermissionView = getIntents.getIntents(appPatch);
         //get normal permission view
         GetPermission getPermission = new GetPermission();
-        appPermission = getPermission.getPermission(notNormalPermissionView); // Список разрешений
+        // json формат разрешений списка разрешений
+        appPermissions = Converters.fromArrayList(getPermission.getPermission(notNormalPermissionView)); // json формат разрешений
 
-
-
+       // room(); // запись в бд
 
 
       //  StringBuilder stringBuilder = new StringBuilder();
@@ -204,6 +191,12 @@ public class StaticAnalyze2 extends Fragment {
     //база данных (локальная)
     private void room(){
 
+//        EmployeeStatic2Database db = SecondApp.getInstance().getDatabase(); // получаем базу данных
+//        EmployeeStatic2Dao employeeStatic2Dao = db.employeeStatic2Dao(); //получаем DAO
+//
+//        EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
+//        employeeStatic2Dao.insert(employeeStatic2);
+//        Log.d(TAG, "room: ");
     }
     //converter draw to byte[]
     private byte[] appDrawToByte(Drawable d){

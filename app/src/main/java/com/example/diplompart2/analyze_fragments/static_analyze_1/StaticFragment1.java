@@ -1,22 +1,15 @@
 package com.example.diplompart2.analyze_fragments.static_analyze_1;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
 import android.graphics.drawable.AnimationDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
-import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,28 +19,21 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.diplompart2.MainActivity;
 import com.example.diplompart2.R;
-import com.example.diplompart2.analyze_fragments.static_analyze_1.room.App;
-import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1;
-import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1Dao;
-import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1Database;
-import com.example.diplompart2.analyze_fragments.static_analyze_2.TypeAtribute;
-import com.google.android.gms.common.data.DataBufferObserver;
+import com.example.diplompart2.analyze_fragments.room.App;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Dao;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
 import com.google.common.base.Stopwatch;
 
-import java.io.File;
-import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-import static androidx.core.content.ContextCompat.getSystemService;
 import static androidx.core.content.ContextCompat.startActivities;
 import static com.example.diplompart2.analyze_fragments.static_analyze_1.check_root.CheckRoot.isRooted;
 
@@ -182,7 +168,9 @@ public class StaticFragment1 extends Fragment {
 
     private void room(){
 
-        EmployeeStatic1Database db = App.getInstance().getDatabase(); // получение базы данных
+//        EmployeeStatic1Database db =  Room.databaseBuilder(Objects.requireNonNull(getContext()).getApplicationContext(),
+//                EmployeeStatic1Database.class, "database").build();  // получение базы данных
+        EmployeeStatic1Database db = App.getInstance().getDatabase();
         EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
 
         //передаем в таблицу
@@ -194,7 +182,7 @@ public class StaticFragment1 extends Fragment {
         employeeStatic1.imei = getIMEI;
         Log.d("ds", "room: check  " + Thread.currentThread().getName());
         employeeStatic1Dao.insert(employeeStatic1);
-        Log.d("ds", "room: second check" + Thread.currentThread().getName());
+        Log.d("ds", "room: second check " + Thread.currentThread().getName());
        // List<EmployeeStatic1> employees = employeeStatic1Dao.getAll();
         //Log.e("Database", "room: " + employees );
 

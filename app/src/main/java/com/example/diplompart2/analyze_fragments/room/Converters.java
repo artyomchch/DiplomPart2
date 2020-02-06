@@ -1,4 +1,4 @@
-package com.example.diplompart2.analyze_fragments.static_analyze_2.room;
+package com.example.diplompart2.analyze_fragments.room;
 
 import androidx.room.TypeConverter;
 

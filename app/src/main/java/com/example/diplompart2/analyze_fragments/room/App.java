@@ -1,8 +1,10 @@
-package com.example.diplompart2.analyze_fragments.static_analyze_1.room;
+package com.example.diplompart2.analyze_fragments.room;
 
 import android.app.Application;
 
 import androidx.room.Room;
+
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
 
 public class App extends Application {
     public static App instance;
@@ -18,7 +20,6 @@ public class App extends Application {
     }
 
 
-
     public static App getInstance() {
         return instance;
     }
@@ -27,3 +28,5 @@ public class App extends Application {
         return database;
     }
 }
+
+

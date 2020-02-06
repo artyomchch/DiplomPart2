@@ -4,28 +4,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.diplompart2.R;
-import com.example.diplompart2.analyze_fragments.static_analyze_1.room.App;
-import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1;
-import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1Dao;
-import com.example.diplompart2.analyze_fragments.static_analyze_1.room.EmployeeStatic1Database;
-import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.example.diplompart2.analyze_fragments.room.App;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Dao;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Function;
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 

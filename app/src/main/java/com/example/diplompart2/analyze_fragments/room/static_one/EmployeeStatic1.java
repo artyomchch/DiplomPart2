@@ -1,4 +1,4 @@
-package com.example.diplompart2.analyze_fragments.static_analyze_1.room;
+package com.example.diplompart2.analyze_fragments.room.static_one;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
