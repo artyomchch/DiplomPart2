@@ -6,8 +6,6 @@ import androidx.room.OnConflictStrategy;
 
 @Dao
 public interface EmployeeStatic2Dao {
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(EmployeeStatic2 employeeStatic2);
-
+        @Insert(onConflict = OnConflictStrategy.IGNORE)
+        void insert(EmployeeStatic2 employeeStatic2);
 }

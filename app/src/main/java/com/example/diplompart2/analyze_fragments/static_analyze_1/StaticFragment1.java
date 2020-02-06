@@ -169,8 +169,8 @@ public class StaticFragment1 extends Fragment {
     private void room(){
 
 //        EmployeeStatic1Database db =  Room.databaseBuilder(Objects.requireNonNull(getContext()).getApplicationContext(),
-//                EmployeeStatic1Database.class, "database").build();  // получение базы данных
-        EmployeeStatic1Database db = App.getInstance().getDatabase();
+//                EmployeeStatic1Database.class, "database").build();
+        EmployeeStatic1Database db = App.getInstance().getDatabase();  // получение базы данных
         EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
 
         //передаем в таблицу
@@ -181,7 +181,9 @@ public class StaticFragment1 extends Fragment {
         employeeStatic1.system = getVersion;
         employeeStatic1.imei = getIMEI;
         Log.d("ds", "room: check  " + Thread.currentThread().getName());
-        employeeStatic1Dao.insert(employeeStatic1);
+       // employeeStatic1Dao.delete(employeeStatic1);
+        employeeStatic1Dao.insertStatic(employeeStatic1);
+
         Log.d("ds", "room: second check " + Thread.currentThread().getName());
        // List<EmployeeStatic1> employees = employeeStatic1Dao.getAll();
         //Log.e("Database", "room: " + employees );

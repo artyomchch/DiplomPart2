@@ -20,6 +20,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.diplompart2.R;
+import com.example.diplompart2.analyze_fragments.room.App;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Dao;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
+import com.example.diplompart2.analyze_fragments.room.static_two.EmployeeStatic2;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.GetIntents;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.GetPermission;
 import com.example.diplompart2.analyze_fragments.room.Converters;
@@ -58,7 +63,8 @@ public class StaticAnalyze2 extends Fragment {
     private String xmlString;
     //Counter
     private static int i;
-
+    EmployeeStatic1Database db = App.getInstance().getDatabase();  // получение базы данных
+    EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,7 +131,7 @@ public class StaticAnalyze2 extends Fragment {
         // json формат разрешений списка разрешений
         appPermissions = Converters.fromArrayList(getPermission.getPermission(notNormalPermissionView)); // json формат разрешений
 
-       // room(); // запись в бд
+        room(); // запись в бд
 
 
       //  StringBuilder stringBuilder = new StringBuilder();
@@ -191,12 +197,9 @@ public class StaticAnalyze2 extends Fragment {
     //база данных (локальная)
     private void room(){
 
-//        EmployeeStatic2Database db = SecondApp.getInstance().getDatabase(); // получаем базу данных
-//        EmployeeStatic2Dao employeeStatic2Dao = db.employeeStatic2Dao(); //получаем DAO
-//
-//        EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
-//        employeeStatic2Dao.insert(employeeStatic2);
-//        Log.d(TAG, "room: ");
+        EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
+        employeeStatic1Dao.insert(employeeStatic2);
+        Log.d(TAG, "room: ");
     }
     //converter draw to byte[]
     private byte[] appDrawToByte(Drawable d){

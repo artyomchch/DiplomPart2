@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
-@Entity
+@Entity (tableName = "table_static_2")
 public class EmployeeStatic2 {
 
     @PrimaryKey()
