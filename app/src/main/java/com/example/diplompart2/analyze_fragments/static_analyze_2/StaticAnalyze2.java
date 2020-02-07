@@ -41,14 +41,10 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class StaticAnalyze2 extends Fragment {
-
-    private byte[] app;
     //TAG observable static 2
     private static String TAG = "Observable Static 2";
     //TextViews
     private TextView CountApp, ProcApp;
-    //ArrayList
-   // private ArrayList<String> appPermission = new ArrayList<>();
     //Drawable
     private Drawable appIcon;
     //Strings of app
@@ -58,13 +54,12 @@ public class StaticAnalyze2 extends Fragment {
     // FrameLayout
     private FrameLayout FrameStat2;
     //GlobalStrings
-    StringsApp sa = new StringsApp();
-    //Some xml file in String var
-    private String xmlString;
+    private StringsApp sa = new StringsApp();
     //Counter
     private static int i;
-    EmployeeStatic1Database db = App.getInstance().getDatabase();  // получение базы данных
-    EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
+    //Database
+    private EmployeeStatic1Database db = App.getInstance().getDatabase();  // получение базы данных
+    private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,12 +83,8 @@ public class StaticAnalyze2 extends Fragment {
         stopwatch.stop();
         Log.e("second Task", "onCreateView: " + stopwatch );
 
-
-
-
         return root;
     }
-
 
 
     //Анимация
@@ -116,12 +107,6 @@ public class StaticAnalyze2 extends Fragment {
         appFullName = packageInfo.packageName; //тех. названия приложения
         appVersion = packageInfo.versionName;  //версия приложения
       //  appIcon = getActivity().getPackageManager().getApplicationIcon(appFullName); // получение иконки
-      //  app = appDrawToByte(appIcon); // получение иконки в байтовой версии
-     //   Log.d(TAG, "mainVoid: ");
-
-
-        //ByteArrayOutputStream stream = new ByteArrayOutputStream();
-       // bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
         //get Intents of app and normal view of xml file manifest
         GetIntents getIntents = new GetIntents();
@@ -130,18 +115,7 @@ public class StaticAnalyze2 extends Fragment {
         GetPermission getPermission = new GetPermission();
         // json формат разрешений списка разрешений
         appPermissions = Converters.fromArrayList(getPermission.getPermission(notNormalPermissionView)); // json формат разрешений
-
         room(); // запись в бд
-
-
-      //  StringBuilder stringBuilder = new StringBuilder();
-      //  stringBuilder.append(appName + " " + appPatch + " " + appFullName + " " + appVersion + "\n");
-
-//        try {
-//            Thread.sleep(10);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
         return num;
     }
@@ -200,23 +174,6 @@ public class StaticAnalyze2 extends Fragment {
         EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
         employeeStatic1Dao.insert(employeeStatic2);
         Log.d(TAG, "room: ");
-    }
-    //converter draw to byte[]
-    private byte[] appDrawToByte(Drawable d){
-      // Drawable d; // the drawable (Captain Obvious, to the rescue!!!)
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        getBitmapFromDrawable(d).compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-    }
-
-    @NonNull
-    private Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
-        final Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(bmp);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bmp;
     }
 
 }

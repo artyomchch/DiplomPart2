@@ -23,7 +23,8 @@ import io.reactivex.schedulers.Schedulers;
 public class GalleryFragment extends Fragment {
 
     private GalleryViewModel galleryViewModel;
-
+    private EmployeeStatic1Database db = App.getInstance().getDatabase(); // получение базы данных
+    private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -31,11 +32,14 @@ public class GalleryFragment extends Fragment {
         galleryViewModel =
                 ViewModelProviders.of(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
+      //  final TextView textView = root.findViewById(R.id.text_gallery);
 
-        EmployeeStatic1Database db = App.getInstance().getDatabase(); // получение базы данных
-        EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
 
+        return root;
+    }
+
+
+    public void getStatic1Data(EmployeeStatic1Database db, TextView textView){
         db.employeeStatic1Dao().getAll2()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -50,12 +54,6 @@ public class GalleryFragment extends Fragment {
                         // ...
                     }
                 });
-
-
-
-
-        return root;
     }
-
 
 }
