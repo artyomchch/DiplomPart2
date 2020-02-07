@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diplompart2.R;
 import com.example.diplompart2.analyze_fragments.room.App;
@@ -22,6 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class GalleryFragment extends Fragment {
 
+    private RecyclerView recyclerView;
     private GalleryViewModel galleryViewModel;
     private EmployeeStatic1Database db = App.getInstance().getDatabase(); // получение базы данных
     private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
@@ -32,6 +34,8 @@ public class GalleryFragment extends Fragment {
         galleryViewModel =
                 ViewModelProviders.of(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+
+        recyclerView = root.findViewById(R.id.recyclerStatic);
       //  final TextView textView = root.findViewById(R.id.text_gallery);
 
 

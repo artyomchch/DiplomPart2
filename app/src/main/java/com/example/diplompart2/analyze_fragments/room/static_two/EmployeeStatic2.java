@@ -32,4 +32,44 @@ public class EmployeeStatic2 {
         this.apkPath = apkPath;
         this.apkPermission = apkPermission;
     }
+
+    public String getApkName() {
+        return apkName;
+    }
+
+    public void setApkName(String apkName) {
+        this.apkName = apkName;
+    }
+
+    public String getApkFullName() {
+        return apkFullName;
+    }
+
+    public void setApkFullName(String apkFullName) {
+        this.apkFullName = apkFullName;
+    }
+
+    public String getApkVersion() {
+        return apkVersion;
+    }
+
+    public void setApkVersion(String apkVersion) {
+        this.apkVersion = apkVersion;
+    }
+
+    public String getApkPath() {
+        return apkPath;
+    }
+
+    public void setApkPath(String apkPath) {
+        this.apkPath = apkPath;
+    }
+
+    public String getApkPermission() {
+        return apkPermission;
+    }
+
+    public void setApkPermission(String apkPermission) {
+        this.apkPermission = apkPermission;
+    }
 }
