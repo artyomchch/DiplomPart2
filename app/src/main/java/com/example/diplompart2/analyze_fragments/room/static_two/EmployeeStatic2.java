@@ -24,6 +24,7 @@ public class EmployeeStatic2 {
 
     public String apkPermission;
 
+
     public EmployeeStatic2(int apkId, String apkName, String apkFullName, String apkVersion, String apkPath, String apkPermission) {
         this.apkId = apkId;
         this.apkName = apkName;
@@ -32,6 +33,8 @@ public class EmployeeStatic2 {
         this.apkPath = apkPath;
         this.apkPermission = apkPermission;
     }
+
+
 
     public String getApkName() {
         return apkName;
@@ -72,4 +75,6 @@ public class EmployeeStatic2 {
     public void setApkPermission(String apkPermission) {
         this.apkPermission = apkPermission;
     }
+
+
 }

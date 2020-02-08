@@ -5,29 +5,25 @@ import android.graphics.drawable.Drawable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TypeAtribute {
-    private int applicationNumber;
-    private String fullAppName;
+public class TypeAtribute2 {
+
     private String nameApp;
+    private String fullAppName;
     private String versionApp;
-    private List<String> permission = new ArrayList<>();
+    private String pathApp;
     private Drawable icon;
+    private String permission;
+    private boolean expanded;
 
-    public TypeAtribute(int applicationNumber, String fullAppName, String nameApp, String versionApp, List<String> permission, Drawable icon) {
-        this.applicationNumber = applicationNumber;
-        this.fullAppName = fullAppName;
+
+    public TypeAtribute2(String nameApp, String fullAppName, String versionApp, String pathApp, Drawable icon, String permission) {
         this.nameApp = nameApp;
+        this.fullAppName = fullAppName;
         this.versionApp = versionApp;
-        this.permission = permission;
+        this.pathApp = pathApp;
         this.icon = icon;
-    }
-
-    public int getApplicationNumber() {
-        return applicationNumber;
-    }
-
-    public void setApplicationNumber(int applicationNumber) {
-        this.applicationNumber = applicationNumber;
+        this.permission = permission;
+        this.expanded = expanded;
     }
 
     public String getFullAppName() {
@@ -54,11 +50,11 @@ public class TypeAtribute {
         this.versionApp = versionApp;
     }
 
-    public List<String> getPermission() {
+    public String getPermission() {
         return permission;
     }
 
-    public void setPermission(List<String> permission) {
+    public void setPermission(String permission) {
         this.permission = permission;
     }
 
@@ -68,5 +64,21 @@ public class TypeAtribute {
 
     public void setIcon(Drawable icon) {
         this.icon = icon;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    public String getPathApp() {
+        return pathApp;
+    }
+
+    public void setPathApp(String pathApp) {
+        this.pathApp = pathApp;
     }
 }

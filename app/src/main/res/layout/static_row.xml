@@ -2,15 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainConstraint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -61,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="14dp"
+                android:paddingBottom="10dp"
                 android:text="Путь:"
                 app:layout_constraintStart_toEndOf="@+id/appViewDB"
                 app:layout_constraintTop_toBottomOf="@+id/fullAppDB" />
@@ -79,7 +84,6 @@
                 android:id="@+id/expandableLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pathDB">
@@ -95,13 +99,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView13"
+                    android:id="@+id/permissionDB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="14dp"
+                    android:paddingRight="20dp"
                     android:paddingBottom="5dp"
-                    android:text="TextView"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/permDB" />
             </androidx.constraintlayout.widget.ConstraintLayout>

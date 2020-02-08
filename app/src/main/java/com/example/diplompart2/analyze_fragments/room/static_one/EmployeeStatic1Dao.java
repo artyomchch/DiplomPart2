@@ -25,7 +25,7 @@ public interface EmployeeStatic1Dao {
     @Query("SELECT * FROM table_static_1")
     Single<EmployeeStatic1> getAll2();
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(EmployeeStatic2 employeeStatic2);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
