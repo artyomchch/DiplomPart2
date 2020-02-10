@@ -64,19 +64,15 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
     // Interfaces...
     private OnActivityDataListener mListener;
     private OnActivityDataListenerRegister rListener;
-
     //String ...
     public String glEmail;
     public String glPassword;
     public String regEmail;
     public String regPassword;
-
     //layouts ..
     ConstraintLayout mainLayout;
-
     // Animation
     AnimationDrawable animationDrawable;
-
     // ProgressBar
     ProgressBar progressBar;
 
@@ -96,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         regEmail = email;
         regPassword = password;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
     }
-
 
     public void Change(View view) {
 

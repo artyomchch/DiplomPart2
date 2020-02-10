@@ -27,6 +27,8 @@ public interface EmployeeStatic1Dao {
     @Query("SELECT * FROM table_static_1")
     Single<EmployeeStatic1> getAll2();
 
+    @Query("SELECT COUNT(*) FROM table_static_2")
+    Single<Integer> getRowCount();
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

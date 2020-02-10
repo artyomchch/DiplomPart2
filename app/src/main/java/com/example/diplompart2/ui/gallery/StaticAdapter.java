@@ -1,10 +1,13 @@
 package com.example.diplompart2.ui.gallery;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,7 +57,10 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.StaticVH> 
 
 
         boolean isExpanded = typeList2.get(position).isExpanded();
+        holder.corner.animate().rotation(isExpanded ? 180 : 0);
         holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+       // holder.corner.setRotation(isExpanded ? 180 : 0);
 
     }
 
@@ -70,7 +76,7 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.StaticVH> 
         ConstraintLayout mainConstraint;
         ConstraintLayout expandableLayout;
         TextView name, fullName, version, path, permission;
-        ImageView icon;
+        ImageView icon, corner;
 
 
         public StaticVH(@NonNull final View itemView){
@@ -84,20 +90,25 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.StaticVH> 
             expandableLayout = itemView.findViewById(R.id.expandableLayout);
             mainConstraint = itemView.findViewById(R.id.mainConstraint);
             icon = itemView.findViewById(R.id.appViewDB);
+            corner = itemView.findViewById(R.id.downRow);
 
 
             mainConstraint.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+
                     TypeAtribute2 typeAtribute2 = typeList2.get(getAdapterPosition());
                     typeAtribute2.setExpanded(!typeAtribute2.isExpanded());
                     notifyItemChanged(getAdapterPosition());
 
+
+                 //   corner.startAnimation(animationRotateCenter);
+                   // animationRotateCenter.setFillAfter(true);
+
                 }
             });
         }
-
-
 
 
     }
