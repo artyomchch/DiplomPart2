@@ -119,24 +119,11 @@ public class StaticAnalyze2 extends Fragment {
 
         return num;
     }
-    //Показатель
-    private int setText(Integer integer){
 
-        i++;
-        ProcApp.setText(i + " / " + sa.getCountOfApp()+ " -> " + Thread.currentThread().getName());
-        if (i == sa.getCountOfApp()){
-            i = 0;
-            FrameStat2.setBackground(Objects.requireNonNull(getContext())
-                    .getDrawable(R.drawable.fragment_bg));
-            animation();
-
-        }
-        return integer;
-    }
     //Асихроность
     private void mainTask(){
         //permission
-        Observable.range(1, sa.getPackageList().size())
+        Observable.range(0, sa.getPackageList().size())
                 .subscribeOn(Schedulers.computation())
                 .filter(new Predicate<Integer>() {   // Фильтр не нужных приложений
                     @Override
@@ -147,30 +134,33 @@ public class StaticAnalyze2 extends Fragment {
                 })
                 .doOnNext(this::mainVoid)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(this::setText)
                 .subscribe(new DisposableObserver<Integer>  () {
                     int countApp= 0;
                     @Override
                     public void onNext(Integer integer) {
                         countApp++;
+                        i++;
+                        ProcApp.setText(i + " / " + sa.getCountOfApp()+ " -> " + Thread.currentThread().getName());
                         Log.d(TAG, "Number: "+ countApp  + " number App: "+ integer + " " );
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e(TAG, "onError: ",e );
                     }
 
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "All numbers emitted!");
-
+                        FrameStat2.setBackground(Objects.requireNonNull(getContext())
+                                .getDrawable(R.drawable.fragment_bg));
+                        animation();
                     }
                 });
     }
     //база данных (локальная)
     private void room(){
-
         EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
         employeeStatic1Dao.insert(employeeStatic2);
         Log.d(TAG, "room: ");

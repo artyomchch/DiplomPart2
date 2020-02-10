@@ -42,6 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class GalleryFragment extends Fragment {
     //recycleView
@@ -90,27 +91,25 @@ public class GalleryFragment extends Fragment {
                         Log.d("TAG", "onSuccess: " + integer);
                         //countRow = integer;
                         complete(integer);
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
 
                     }
+
                 });
     }
 
     private void initRecyclerView() {
-        try {
-            Thread.sleep(0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         StaticAdapter staticAdapter = new StaticAdapter(typeList);
         recyclerView.setAdapter(staticAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void complete(int i) {
+    private void complete(int i)  {
         typeList = new ArrayList<>();
         Observable.range(1, i)
                 .subscribeOn(Schedulers.io())
@@ -121,16 +120,17 @@ public class GalleryFragment extends Fragment {
                 .subscribe(new DisposableObserver<Integer>() {
                     @Override
                     public void onNext(Integer integer) {
-
+                        Log.d(TAG, "onNext: "+ integer);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e(TAG, "onError: "+ e);
                     }
 
                     @Override
                     public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
                         progressBarList.stopNestedScroll();
                         progressBarList.setVisibility(INVISIBLE);
                         initRecyclerView();
@@ -146,7 +146,8 @@ public class GalleryFragment extends Fragment {
     private void getDataFromRoom(int i) throws PackageManager.NameNotFoundException {
 
         EmployeeStatic2 employee = employeeStatic1Dao.getById(i);
-        typeList.add(new TypeAtribute2(employee.apkName,
+        typeList.add(new TypeAtribute2(
+                employee.apkName,
                 employee.apkFullName,
                 employee.apkVersion,
                 employee.apkPath,
