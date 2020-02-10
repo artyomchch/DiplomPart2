@@ -48,7 +48,7 @@ public class GalleryFragment extends Fragment {
     private RecyclerView recyclerView;
     List<TypeAtribute2> typeList;
     //Convert
-    Converters converters =new Converters();
+    Converters converters = new Converters();
     // ProgressBar
     ProgressBar progressBarList;
     Sprite ThreeBounce = new ThreeBounce(); // sprite for animation
@@ -70,7 +70,7 @@ public class GalleryFragment extends Fragment {
         progressBarList.setVisibility(VISIBLE);
         progressBarList.setIndeterminateDrawable(ThreeBounce);
 
-      //  final TextView textView = root.findViewById(R.id.text_gallery);
+        //  final TextView textView = root.findViewById(R.id.text_gallery);
 
 //        try {
 //            //initData();
@@ -81,24 +81,20 @@ public class GalleryFragment extends Fragment {
         complete();
 
 
-
-
-
-
-      //  getDataFromRoom(1);
+        //  getDataFromRoom(1);
 
         return root;
     }
 
 
-    public void getStatic1Data(EmployeeStatic1Database db, TextView textView){
+    public void getStatic1Data(EmployeeStatic1Database db, TextView textView) {
         db.employeeStatic1Dao().getAll2()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableSingleObserver<EmployeeStatic1>() {
                     @Override
                     public void onSuccess(EmployeeStatic1 employee) {
-                        textView.setText(employee.model + " " + employee.imei + " " + employee.system+ " " + employee.root);
+                        textView.setText(employee.model + " " + employee.imei + " " + employee.system + " " + employee.root);
                     }
 
                     @Override
@@ -122,7 +118,7 @@ public class GalleryFragment extends Fragment {
 
     private void initData() throws PackageManager.NameNotFoundException {
 
-       // typeList.add(new TypeAtribute2("dsd","Iron Man", "7.9", "2008",ico("com.vkontakte.android"),"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil."));
+        // typeList.add(new TypeAtribute2("dsd","Iron Man", "7.9", "2008",ico("com.vkontakte.android"),"After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil."));
 //        typeList.add(new TypeAtribute2( "dsds","The Incredible Hulk", "6.7", "2008", ico("com.vkontakte.android"),"Bruce Banner, a scientist on the run from the U.S. Government, must find a cure for the monster he turns into, whenever he loses his temper."));
 //        typeList.add(new TypeAtribute2( "dsds","Iron Man 2", "7.0", "2010", ico("com.vkontakte.android"),"With the world now aware of his identity as Iron Man, Tony Stark must contend with both his declining health and a vengeful mad man with ties to his father's legacy."));
 //        typeList.add(new TypeAtribute2( "dsds","Thor", "7.0", "2011", ico("com.vkontakte.android"),"The powerful but arrogant god Thor is cast out of Asgard to live amongst humans in Midgard (Earth), where he soon becomes one of their finest defenders."));
@@ -135,7 +131,7 @@ public class GalleryFragment extends Fragment {
     }
 
     private Drawable ico(String app) throws PackageManager.NameNotFoundException {
-        Drawable appIco =  Objects.requireNonNull(getActivity()).getPackageManager().getApplicationIcon(app);
+        Drawable appIco = Objects.requireNonNull(getActivity()).getPackageManager().getApplicationIcon(app);
         return appIco;
     }
 
@@ -149,19 +145,19 @@ public class GalleryFragment extends Fragment {
                 ico(employee.apkFullName),
                 getConvertListPermission(converters.fromString((employee.apkPermission))).toString()));
 
-        System.out.println(getConvertListPermission(converters.fromString(employee.apkPermission))  +"            Thread ->   " +Thread.currentThread().getName());
+        System.out.println(getConvertListPermission(converters.fromString(employee.apkPermission)) + "            Thread ->   " + Thread.currentThread().getName());
 
 
     }
 
-    private void complete(){
+    private void complete() {
         typeList = new ArrayList<>();
-        Observable.range(1,35)
+        Observable.range(1, 35)
                 .subscribeOn(Schedulers.io())
                 .doOnNext(this::getDataFromRoom)
                 .observeOn(AndroidSchedulers.mainThread())
 
-               // .doOnNext(this::initRecyclerView)
+                // .doOnNext(this::initRecyclerView)
                 .subscribe(new DisposableObserver<Integer>() {
                     @Override
                     public void onNext(Integer integer) {
@@ -183,13 +179,13 @@ public class GalleryFragment extends Fragment {
     }
 
 
-    private StringBuilder getConvertListPermission( ArrayList<String> perm){
+    private StringBuilder getConvertListPermission(ArrayList<String> perm) {
 
         StringBuilder s = new StringBuilder();
-        for (int i = 0; i < perm.size(); i++){
-            s.append(i+1 + ") " + perm.get(i) + "\n");
+        for (int i = 0; i < perm.size(); i++) {
+            s.append(i + 1 + ") " + perm.get(i) + "\n");
         }
-            return s;
+        return s;
 
     }
 
