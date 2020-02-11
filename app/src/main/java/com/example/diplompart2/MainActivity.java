@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
     //Buttons ..
     Button signIn, signUp, back, signUpReg;
     //TextView
-    private TextView textView;
+  //  private TextView textView;
     //Firebase ..
     private FirebaseAuth mAuth;
     private String TAG = "Check:";
@@ -79,16 +79,16 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
 
     @Override
     public void onFragment1DataListener(String email, String password) {
-        textView.setText(email);
-        textView.append("   " + password);
+//        textView.setText(email);
+//        textView.append("   " + password);
         glEmail = email;
         glPassword = password;
     }
 
     @Override
     public void onFragment2DataListener(String email, String password) {
-        textView.setText(email);
-        textView.append("   " + password);
+//        textView.setText(email);
+//        textView.append("   " + password);
         regEmail = email;
         regPassword = password;
     }
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements OnFragment1DataLi
         back = findViewById(R.id.back);
         signUpReg = findViewById(R.id.sign_up_regis);
         //TextView...
-        textView = findViewById(R.id.textViewTest);
+        //textView = findViewById(R.id.textViewTest);
         //work with fragments ...
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment1).commit();

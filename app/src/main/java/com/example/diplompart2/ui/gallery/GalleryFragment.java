@@ -47,12 +47,12 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class GalleryFragment extends Fragment {
     //recycleView
     private RecyclerView recyclerView;
-    List<TypeAtribute2> typeList;
+    private List<TypeAtribute2> typeList;
     //Convert
-    Converters converters = new Converters();
+    private Converters converters = new Converters();
     // ProgressBar
-    ProgressBar progressBarList;
-    Sprite ThreeBounce = new ThreeBounce(); // sprite for animation
+    private ProgressBar progressBarList;
+    private Sprite ThreeBounce = new ThreeBounce(); // sprite for animation
     //integers
     private static int countRow;
 
@@ -69,12 +69,11 @@ public class GalleryFragment extends Fragment {
         //recyclerView
         recyclerView = root.findViewById(R.id.recyclerStatic);
         progressBarList = root.findViewById(R.id.progressList);
-
+        //progressBar
         progressBarList.setVisibility(VISIBLE);
         progressBarList.setIndeterminateDrawable(ThreeBounce);
-
+        //mainTask
         count();
-     //   complete();
 
 
         return root;
@@ -96,7 +95,7 @@ public class GalleryFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e(TAG, "onError: " + e );
                     }
 
                 });
@@ -115,8 +114,6 @@ public class GalleryFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .doOnNext(this::getDataFromRoom)
                 .observeOn(AndroidSchedulers.mainThread())
-
-                // .doOnNext(this::initRecyclerView)
                 .subscribe(new DisposableObserver<Integer>() {
                     @Override
                     public void onNext(Integer integer) {
@@ -158,8 +155,6 @@ public class GalleryFragment extends Fragment {
 
 
     }
-
-
 
     private StringBuilder getConvertListPermission(ArrayList<String> perm) {
 
