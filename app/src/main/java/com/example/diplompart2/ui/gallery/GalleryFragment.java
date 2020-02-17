@@ -80,6 +80,9 @@ public class GalleryFragment extends Fragment {
     }
 
 
+
+
+
     private void count(){
         db.employeeStatic1Dao().getRowCount()
                 .subscribeOn(Schedulers.io())

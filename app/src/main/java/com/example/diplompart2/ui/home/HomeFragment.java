@@ -39,6 +39,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 100;
@@ -87,7 +89,6 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
         return root;
     }
-
 
 
     @Override

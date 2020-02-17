@@ -24,8 +24,16 @@ import com.example.diplompart2.analyze_fragments.room.App;
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1;
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Dao;
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.retrofit.RetroPart1;
 import com.google.common.base.Stopwatch;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.Observable;
@@ -33,7 +41,12 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static androidx.core.content.ContextCompat.startActivities;
 import static com.example.diplompart2.analyze_fragments.static_analyze_1.check_root.CheckRoot.isRooted;
 
@@ -56,8 +69,18 @@ public class StaticFragment1 extends Fragment {
     private String getModel;
     //version
     private String getVersion;
-
-
+    //URL
+    private String URL = "https://aqueous-temple-55115.herokuapp.com";
+    //Gson
+    private Gson gson = new GsonBuilder()
+            .create();
+    //Retrofit
+    private Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build();
+    //interface
+    private RetroPart1 intf = retrofit.create(RetroPart1.class);
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -108,6 +131,8 @@ public class StaticFragment1 extends Fragment {
 
         //database
         room();
+        //retrofit
+        retrofit();
 
         return integer;
     }
@@ -156,12 +181,12 @@ public class StaticFragment1 extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e(TAG, "onError: ", e );
                     }
 
                     @Override
                     public void onComplete() {
-
+                        Log.d(TAG, "onComplete: Succses");
                     }
                 });
     }
@@ -184,6 +209,37 @@ public class StaticFragment1 extends Fragment {
         employeeStatic1Dao.insertStatic(employeeStatic1);
         Log.d("ds", "room: second check " + Thread.currentThread().getName());
 
+
+    }
+
+    private void retrofit(){
+
+        Map<String, String> mapJson = new HashMap<String, String>();
+        mapJson.put("staticid", "1");
+        mapJson.put("root", boolRoot.toString());
+        mapJson.put("model", getModel);
+        mapJson.put("system", getVersion);
+        mapJson.put("imei", getIMEI);
+
+
+
+        Log.d(TAG, "retrofit: " + mapJson);
+        Gson gson = new Gson();
+        String json = gson.toJson(mapJson);
+        Log.d(TAG, "retrofit: " + json);
+
+        Call<Object> putPart1 = intf.updatePart1(mapJson);
+
+        try {
+            Response<Object> response = putPart1.execute();
+            //ответ от сервера
+//            Map map = gson.fromJson(response.body().toString(), Map.class);
+          //  for (Map.Entry e : map.entrySet()){
+         //       Log.d(TAG, "retrofit: " +e.getKey() + " " + e.getValue());
+          //  }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

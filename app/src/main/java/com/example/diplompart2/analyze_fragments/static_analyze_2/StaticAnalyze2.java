@@ -163,7 +163,7 @@ public class StaticAnalyze2 extends Fragment {
     private void room(){
         EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
         employeeStatic1Dao.insert(employeeStatic2);
-        Log.d(TAG, "room: ");
+        Log.d(TAG, "room: sucsess");
     }
 
 }
