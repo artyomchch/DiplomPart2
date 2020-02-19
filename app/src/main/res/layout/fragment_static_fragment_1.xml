@@ -8,11 +8,9 @@
     android:layout_marginLeft="20dp"
     android:layout_marginTop="10dp"
     android:layout_marginRight="20dp"
-    android:layout_marginBottom="10dp"
 
     android:alpha="1"
     android:background="@drawable/fragment_bg_wait"
-    android:paddingBottom="10dp"
     tools:context=".analyze_fragments.static_analyze_1.StaticFragment1">
 
     <LinearLayout
@@ -24,97 +22,122 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="0dp">
+            android:layout_margin="10dp"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/rootView"
-                android:layout_width="196dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:paddingTop="28dp"
-                android:paddingBottom="27dp"
+                android:layout_marginRight="10dp"
                 android:text="Присутствуют ли рут-права:"
-                android:textSize="17sp" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/rootImage"
-                android:layout_width="35dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingBottom="3dp"
                 android:src="@drawable/correct" />
         </LinearLayout>
 
-        <TableLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TableRow
+            <TableLayout
+                android:id="@+id/tableLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/modelView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="Модель устройства:" />
-
-                <TextView
-                    android:id="@+id/modelText"
-                    android:layout_width="wrap_content"
+                <TableRow
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="TextView" />
-            </TableRow>
+                    android:gravity="center">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/modelView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:text="Модель устройства:" />
 
-                <TextView
-                    android:id="@+id/versionView"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/modelText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Xiaomi Mi A2 Lite"
+                        android:visibility="invisible" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="10dp"
-                    android:text="Версия ОС:" />
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/modelVersion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="TextView" />
-            </TableRow>
+                    <TextView
+                        android:id="@+id/versionView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="10dp"
+                        android:text="Версия ОС:" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/modelVersion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Xiaomi Mi A2 Lite"
+                        android:visibility="invisible" />
+                </TableRow>
 
-                <TextView
-                    android:id="@+id/imeiView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:text="IMEI устройства:" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/IMEI"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="TextView" />
-            </TableRow>
+                    <TextView
+                        android:id="@+id/imeiView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:text="IMEI устройства:" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </TableLayout>
+                    <TextView
+                        android:id="@+id/IMEI"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Xiaomi mi a2 Lite"
+                        android:visibility="invisible" />
+
+                </TableRow>
+
+
+            </TableLayout>
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/spin_kit"
+                style="@style/SpinKitView.FadingCircle"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="invisible"
+                app:SpinKit_Color="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </LinearLayout>
 
 </FrameLayout>

@@ -40,6 +40,7 @@
 
     </com.example.myloadingbutton.MyLoadingButton>
 
+
     <FrameLayout
         android:id="@+id/StaticFrameLayout"
         android:layout_width="0dp"
@@ -62,5 +63,6 @@
         app:layout_constraintTop_toBottomOf="@+id/StaticFrameLayout">
 
     </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

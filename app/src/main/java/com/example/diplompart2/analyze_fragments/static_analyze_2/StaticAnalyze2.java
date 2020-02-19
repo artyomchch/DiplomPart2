@@ -30,8 +30,11 @@ import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.Get
 import com.example.diplompart2.analyze_fragments.room.Converters;
 import com.example.diplompart2.analyze_fragments.strings.StringsApp;
 import com.google.common.base.Stopwatch;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.Observable;
@@ -49,6 +52,8 @@ public class StaticAnalyze2 extends Fragment {
     private Drawable appIcon;
     //Strings of app
     private String appName, appFullName, appPatch, appVersion, appPermissions;
+    //Json
+    private StringBuilder json = new StringBuilder();
     // Animation
     private AnimationDrawable animationDrawable;
     // FrameLayout
@@ -60,6 +65,10 @@ public class StaticAnalyze2 extends Fragment {
     //Database
     private EmployeeStatic1Database db = App.getInstance().getDatabase();  // получение базы данных
     private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
+    //map
+    private Map<String, String> mapJson = new HashMap<String, String>();
+    //gson
+    private Gson gson = new Gson();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,6 +107,7 @@ public class StaticAnalyze2 extends Fragment {
     }
     //Главная задача
     private int mainVoid(Integer num) throws PackageManager.NameNotFoundException {
+
         PackageInfo packageInfo=sa.getPackageList().get(num);
         //StringsApp of app
         appName = packageInfo.applicationInfo.loadLabel(Objects.requireNonNull(getActivity())
@@ -140,7 +150,7 @@ public class StaticAnalyze2 extends Fragment {
                     public void onNext(Integer integer) {
                         countApp++;
                         i++;
-                        ProcApp.setText(i + " / " + sa.getCountOfApp()+ " -> " + Thread.currentThread().getName());
+                        ProcApp.setText(i + " / " + sa.getCountOfApp());
                         Log.d(TAG, "Number: "+ countApp  + " number App: "+ integer + " " );
 
                     }
@@ -156,12 +166,19 @@ public class StaticAnalyze2 extends Fragment {
                         FrameStat2.setBackground(Objects.requireNonNull(getContext())
                                 .getDrawable(R.drawable.fragment_bg));
                         animation();
+                        Log.d(TAG, "onComplete: "+ json);
                     }
                 });
     }
     //база данных (локальная)
     private void room(){
         EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
+        mapJson.put("apk_name", appName);
+        mapJson.put("apkFullName" , appFullName);
+        mapJson.put("apk_version", appVersion);
+        mapJson.put("apk_path", appPatch);
+        mapJson.put("apk_permission", appPermissions);
+        json.append(gson.toJson(mapJson));
         employeeStatic1Dao.insert(employeeStatic2);
         Log.d(TAG, "room: sucsess");
     }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.diplompart2.R;
@@ -25,10 +26,16 @@ import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Dao;
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
 import com.example.diplompart2.analyze_fragments.static_analyze_1.retrofit.RetroPart1;
+import com.example.diplompart2.analyze_fragments.static_analyze_2.TypeAtribute2;
+import com.github.ybq.android.spinkit.sprite.CircleSprite;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.github.ybq.android.spinkit.style.ThreeBounce;
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,17 +48,23 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import static android.view.View.VISIBLE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static androidx.core.content.ContextCompat.startActivities;
 import static com.example.diplompart2.analyze_fragments.static_analyze_1.check_root.CheckRoot.isRooted;
 
 
 public class StaticFragment1 extends Fragment {
+    //Rotate Loading
+    private ProgressBar progressBar;
+    private Sprite FadingCircle = new FadingCircle(); // sprite for animation
 
     //TextView ..
     private TextView model, version, imei;
@@ -73,11 +86,13 @@ public class StaticFragment1 extends Fragment {
     private String URL = "https://aqueous-temple-55115.herokuapp.com";
     //Gson
     private Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
             .create();
     //Retrofit
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build();
     //interface
     private RetroPart1 intf = retrofit.create(RetroPart1.class);
@@ -98,9 +113,12 @@ public class StaticFragment1 extends Fragment {
         FrameStat1 = root.findViewById(R.id.stat1);
         // ImageView
         RootView = root.findViewById(R.id.rootImage);
-
+        //Rotate Loading
+        progressBar = root.findViewById(R.id.spin_kit);
         //animation
         animation();
+        progressBar.setIndeterminateDrawable(FadingCircle);
+
 
         //get manafacture ..
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -115,7 +133,7 @@ public class StaticFragment1 extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
-    private int manafacture(Integer integer){
+    private void manafacture(Integer integer){
 
         Stopwatch stopwatch = Stopwatch.createStarted();
         TelephonyManager telephonyManager = (TelephonyManager) Objects.requireNonNull(getContext()).
@@ -129,12 +147,8 @@ public class StaticFragment1 extends Fragment {
         stopwatch.stop();
         Log.e("first task get Imei", "manafacture: " + stopwatch  + "  ->  "+ Thread.currentThread().getName());
 
-        //database
-        room();
-        //retrofit
-        retrofit();
 
-        return integer;
+
     }
 
     private void animation() {
@@ -142,13 +156,19 @@ public class StaticFragment1 extends Fragment {
         animationDrawable.setEnterFadeDuration(1500);
         animationDrawable.setExitFadeDuration(1500);
         animationDrawable.start();
+
     }
 
-    private int setTextValue(Integer integer){
+    private void setTextValue(Integer integer){
+
+        progressBar.setVisibility(VISIBLE);
 
         model.setText(getModel);
+        model.setVisibility(View.VISIBLE);
         version.setText(getVersion);
+        version.setVisibility(View.VISIBLE);
         imei.setText(getIMEI);
+        imei.setVisibility(View.VISIBLE);
         TypeAtributes1 ta1 = new TypeAtributes1(getModel, getIMEI, getVersion, boolRoot);
         if (!boolRoot){
             RootView.setImageResource(R.drawable.quit);
@@ -156,9 +176,6 @@ public class StaticFragment1 extends Fragment {
         FrameStat1.setBackground(Objects.requireNonNull(getContext())
                 .getDrawable(R.drawable.fragment_bg));
         animation();
-
-
-        return integer;
 
     }
 
@@ -168,6 +185,9 @@ public class StaticFragment1 extends Fragment {
                 .doOnNext(this::manafacture)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(this::setTextValue)
+                .observeOn(Schedulers.io())
+                .doOnNext(this::retrofit)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Integer>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -187,6 +207,8 @@ public class StaticFragment1 extends Fragment {
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "onComplete: Succses");
+                        progressBar.setVisibility(View.INVISIBLE);
+
                     }
                 });
     }
@@ -212,7 +234,9 @@ public class StaticFragment1 extends Fragment {
 
     }
 
-    private void retrofit(){
+    private void retrofit(Integer integer){
+        //database
+        room();
 
         Map<String, String> mapJson = new HashMap<String, String>();
         mapJson.put("staticid", "1");
@@ -227,19 +251,16 @@ public class StaticFragment1 extends Fragment {
         Gson gson = new Gson();
         String json = gson.toJson(mapJson);
         Log.d(TAG, "retrofit: " + json);
+        Call<Object> putPart1 = intf.getPart1(json);
 
-        Call<Object> putPart1 = intf.updatePart1(mapJson);
+        Log.d(TAG, "retrofit: " + putPart1);
+
 
         try {
-            Response<Object> response = putPart1.execute();
-            //ответ от сервера
-//            Map map = gson.fromJson(response.body().toString(), Map.class);
-          //  for (Map.Entry e : map.entrySet()){
-         //       Log.d(TAG, "retrofit: " +e.getKey() + " " + e.getValue());
-          //  }
+            Response<Object> reer = putPart1.execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-    }
+   }
 }
