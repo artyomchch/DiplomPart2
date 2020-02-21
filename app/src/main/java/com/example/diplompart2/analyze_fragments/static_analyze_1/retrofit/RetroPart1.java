@@ -21,7 +21,7 @@ public interface RetroPart1 {
     Call<Object> getPart1(@Body String body);
 
     @Headers("Content-Type: application/json")
-    @POST("/parts1")
+    @POST("/parts2")
     Call<Object> getPart2(@Body String body);
 
 

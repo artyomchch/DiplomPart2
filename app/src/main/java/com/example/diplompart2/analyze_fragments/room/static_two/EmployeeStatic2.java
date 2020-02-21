@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
@@ -33,7 +34,6 @@ public class EmployeeStatic2 {
         this.apkPath = apkPath;
         this.apkPermission = apkPermission;
     }
-
 
 
     public String getApkName() {

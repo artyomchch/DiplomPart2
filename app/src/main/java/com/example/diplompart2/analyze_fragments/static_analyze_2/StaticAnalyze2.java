@@ -25,6 +25,7 @@ import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Dao;
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
 import com.example.diplompart2.analyze_fragments.room.static_two.EmployeeStatic2;
+import com.example.diplompart2.analyze_fragments.static_analyze_1.retrofit.RetroPart1;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.GetIntents;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.GetPermission;
 import com.example.diplompart2.analyze_fragments.room.Converters;
@@ -33,15 +34,27 @@ import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class StaticAnalyze2 extends Fragment {
     //TAG observable static 2
@@ -53,7 +66,7 @@ public class StaticAnalyze2 extends Fragment {
     //Strings of app
     private String appName, appFullName, appPatch, appVersion, appPermissions;
     //Json
-    private StringBuilder json = new StringBuilder();
+    private String json;
     // Animation
     private AnimationDrawable animationDrawable;
     // FrameLayout
@@ -67,8 +80,20 @@ public class StaticAnalyze2 extends Fragment {
     private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
     //map
     private Map<String, String> mapJson = new HashMap<String, String>();
+    //list of arrays
+    protected static List<EmployeeStatic2> listss = new ArrayList<EmployeeStatic2>();
     //gson
     private Gson gson = new Gson();
+    //URL
+    private String URL = "https://aqueous-temple-55115.herokuapp.com";
+    //Retrofit
+    private Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+    //interface
+    private RetroPart1 intf = retrofit.create(RetroPart1.class);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -166,21 +191,70 @@ public class StaticAnalyze2 extends Fragment {
                         FrameStat2.setBackground(Objects.requireNonNull(getContext())
                                 .getDrawable(R.drawable.fragment_bg));
                         animation();
-                        Log.d(TAG, "onComplete: "+ json);
+                        json = gson.toJson(listss);
+                        //Log.d(TAG, "onComplete: "+ json);
+                        returnData();
+
+
                     }
                 });
     }
     //база данных (локальная)
     private void room(){
         EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
-        mapJson.put("apk_name", appName);
-        mapJson.put("apkFullName" , appFullName);
-        mapJson.put("apk_version", appVersion);
-        mapJson.put("apk_path", appPatch);
-        mapJson.put("apk_permission", appPermissions);
-        json.append(gson.toJson(mapJson));
+//        mapJson.put("apk_name", appName);
+//        mapJson.put("apkFullName" , appFullName);
+//        mapJson.put("apk_version", appVersion);
+//        mapJson.put("apk_path", appPatch);
+//        mapJson.put("apk_permission", appPermissions);
+        listss.add(new EmployeeStatic2(i+1, appName,appFullName,appVersion,appPatch,appPermissions));
+
         employeeStatic1Dao.insert(employeeStatic2);
-        Log.d(TAG, "room: sucsess");
+
+        Log.d(TAG, "room and json: sucsess");
     }
+
+    private void returnData(){
+        Observable.just(1)
+                .subscribeOn(Schedulers.io())
+                .doOnNext(this::retrofit)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "onError: ", e );
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("aaaaaaaaaaaaaa", "onComplete: Succses");
+
+
+                    }
+                });
+    }
+
+
+    public void retrofit(Integer integer){
+        Call<Object> putPart2 = intf.getPart2("{\"app\" : " + json + "}");
+        try {
+            Response<Object> reer = putPart2.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
 }
