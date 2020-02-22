@@ -80,8 +80,10 @@ public class StaticAnalyze2 extends Fragment {
     private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
     //map
     private Map<String, String> mapJson = new HashMap<String, String>();
+    //apkpermission
+    ArrayList<String> apkPermissionArray = new ArrayList<String>();
     //list of arrays
-    protected static List<EmployeeStatic2> listss = new ArrayList<EmployeeStatic2>();
+    protected static List<tY> listss = new ArrayList<EmployeeStatic2>();
     //gson
     private Gson gson = new Gson();
     //URL
@@ -150,6 +152,7 @@ public class StaticAnalyze2 extends Fragment {
         GetPermission getPermission = new GetPermission();
         // json формат разрешений списка разрешений
         appPermissions = Converters.fromArrayList(getPermission.getPermission(notNormalPermissionView)); // json формат разрешений
+        apkPermissionArray = getPermission.getPermission(notNormalPermissionView);
         room(); // запись в бд
 
         return num;
@@ -207,11 +210,12 @@ public class StaticAnalyze2 extends Fragment {
 //        mapJson.put("apk_version", appVersion);
 //        mapJson.put("apk_path", appPatch);
 //        mapJson.put("apk_permission", appPermissions);
-        listss.add(new EmployeeStatic2(i+1, appName,appFullName,appVersion,appPatch,appPermissions));
+       // listss.add(new EmployeeStatic2(i+1, appName,appFullName,appVersion,appPatch,appPermissions));
+        listss.add(new TypeAtribute2(appName, appFullName, appVersion, appPatch, apkPermissionArray));
 
         employeeStatic1Dao.insert(employeeStatic2);
 
-        Log.d(TAG, "room and json: sucsess");
+        Log.d(TAG, "room and json: success");
     }
 
     private void returnData(){

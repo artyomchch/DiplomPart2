@@ -13,6 +13,7 @@ public class TypeAtribute2 {
     private String pathApp;
     private Drawable icon;
     private String permission;
+    private ArrayList<String> permissionArray;
     private boolean expanded;
 
 
@@ -25,6 +26,16 @@ public class TypeAtribute2 {
         this.permission = permission;
         this.expanded = expanded;
     }
+
+    public  TypeAtribute2(String nameApp, String fullAppName, String versionApp, String pathApp, ArrayList<String> permissionArray){
+        this.nameApp = nameApp;
+        this.fullAppName = fullAppName;
+        this.versionApp = versionApp;
+        this.pathApp = pathApp;
+        this.permissionArray = permissionArray;
+    }
+
+
 
     public String getFullAppName() {
         return fullAppName;
