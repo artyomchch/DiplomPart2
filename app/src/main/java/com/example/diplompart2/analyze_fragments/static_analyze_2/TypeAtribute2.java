@@ -8,7 +8,7 @@ import java.util.List;
 public class TypeAtribute2 {
 
     private String nameApp;
-    private String fullAppName;
+    private String packageName;
     private String versionApp;
     private String pathApp;
     private Drawable icon;
@@ -17,9 +17,9 @@ public class TypeAtribute2 {
     private boolean expanded;
 
 
-    public TypeAtribute2(String nameApp, String fullAppName, String versionApp, String pathApp, Drawable icon, String permission) {
+    public TypeAtribute2(String nameApp, String packageName, String versionApp, String pathApp, Drawable icon, String permission) {
         this.nameApp = nameApp;
-        this.fullAppName = fullAppName;
+        this.packageName = packageName;
         this.versionApp = versionApp;
         this.pathApp = pathApp;
         this.icon = icon;
@@ -27,9 +27,9 @@ public class TypeAtribute2 {
         this.expanded = expanded;
     }
 
-    public  TypeAtribute2(String nameApp, String fullAppName, String versionApp, String pathApp, ArrayList<String> permissionArray){
+    public TypeAtribute2(String nameApp, String packageName, String versionApp, String pathApp, ArrayList<String> permissionArray){
         this.nameApp = nameApp;
-        this.fullAppName = fullAppName;
+        this.packageName = packageName;
         this.versionApp = versionApp;
         this.pathApp = pathApp;
         this.permissionArray = permissionArray;
@@ -37,12 +37,12 @@ public class TypeAtribute2 {
 
 
 
-    public String getFullAppName() {
-        return fullAppName;
+    public String getPackageName() {
+        return packageName;
     }
 
-    public void setFullAppName(String fullAppName) {
-        this.fullAppName = fullAppName;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     public String getNameApp() {

@@ -49,7 +49,7 @@ public class StaticAdapter extends RecyclerView.Adapter<StaticAdapter.StaticVH> 
     public void onBindViewHolder(@NonNull StaticVH holder, int position) {
         TypeAtribute2 typeAtribute2 = typeList2.get(position);
         holder.name.setText(typeAtribute2.getNameApp());
-        holder.fullName.setText(typeAtribute2.getFullAppName());
+        holder.fullName.setText(typeAtribute2.getPackageName());
         holder.version.setText(typeAtribute2.getVersionApp());
         holder.path.setText(typeAtribute2.getPathApp());
         holder.permission.setText(typeAtribute2.getPermission());

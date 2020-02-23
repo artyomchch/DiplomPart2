@@ -27,6 +27,8 @@ import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
 import com.example.diplompart2.analyze_fragments.static_analyze_1.retrofit.RetroPart1;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.TypeAtribute2;
+import com.example.diplompart2.analyze_fragments.strings.StringsApp;
+import com.example.diplompart2.ui.home.HomeFragment;
 import com.github.ybq.android.spinkit.sprite.CircleSprite;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
@@ -62,6 +64,7 @@ import static com.example.diplompart2.analyze_fragments.static_analyze_1.check_r
 
 
 public class StaticFragment1 extends Fragment {
+
     //Rotate Loading
     private ProgressBar progressBar;
     private Sprite FadingCircle = new FadingCircle(); // sprite for animation
@@ -102,7 +105,6 @@ public class StaticFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_static_fragment_1, container, false);
-
 
 
         //TextView
@@ -206,13 +208,17 @@ public class StaticFragment1 extends Fragment {
 
                     @Override
                     public void onComplete() {
+                        StringsApp sa = new StringsApp();
                         Log.d(TAG, "onComplete: Succses");
                         progressBar.setVisibility(View.INVISIBLE);
+                        sa.setVariableToObserve(1);
+                        sa.getmObservable().onNext(sa.getVariableToObserve());
+
 
                     }
                 });
     }
-
+    //room
     private void room(){
 
 
@@ -233,7 +239,7 @@ public class StaticFragment1 extends Fragment {
 
 
     }
-
+    //retrofit
     private void retrofit(Integer integer){
         //database
         room();

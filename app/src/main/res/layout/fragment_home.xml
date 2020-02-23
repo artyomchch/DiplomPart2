@@ -64,5 +64,28 @@
 
     </FrameLayout>
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit_home_1"
+        style="@style/SpinKitView.FadingCircle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="165dp"
+        android:layout_marginBottom="600dp"
+        android:visibility="invisible"
+        app:SpinKit_Color="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit_home_2"
+        style="@style/SpinKitView.FadingCircle"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="165dp"
+        android:layout_marginBottom="420dp"
+        android:visibility="invisible"
+        app:SpinKit_Color="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

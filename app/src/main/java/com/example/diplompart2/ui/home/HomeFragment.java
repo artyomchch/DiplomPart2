@@ -1,9 +1,11 @@
 package com.example.diplompart2.ui.home;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.drm.DrmStore;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -28,17 +31,26 @@ import com.example.diplompart2.analyze_fragments.static_analyze_1.StaticFragment
 import com.example.diplompart2.analyze_fragments.static_analyze_2.StaticAnalyze2;
 import com.example.diplompart2.analyze_fragments.strings.StringsApp;
 import com.example.myloadingbutton.MyLoadingButton;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.common.base.Stopwatch;
 
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
+import static android.view.View.VISIBLE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick {
@@ -56,6 +68,11 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
 
 
+    //Rotate Loading
+    private ProgressBar progressBar;
+    private ProgressBar progressBar2;
+    private Sprite FadingCircle = new FadingCircle(); // sprite for animation
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
@@ -69,22 +86,27 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
                 textView.setText(s);
             }
         });
+        //Rotate Loading
+        progressBar = root.findViewById(R.id.spin_kit_home_1);
+        progressBar2 = root.findViewById(R.id.spin_kit_home_2);
 
         //Loading button
         myLoadingButton = root.findViewById(R.id.my_loading_button);
         myLoadingButton.setMyButtonClickListener(this);
 
+
         //fragments
        fragmentStatic1 = new StaticFragment1();
        fragmentStatic2 = new StaticAnalyze2();
 
-
-
+        //progresbar
+        progressBar.setIndeterminateDrawable(FadingCircle);
+        progressBar2.setIndeterminateDrawable(FadingCircle);
         //multiThread
-        Stopwatch stopwatch = Stopwatch.createStarted();
         multiThread();
-        stopwatch.stop();
-        Log.e(TAG, "enter task: " + stopwatch );
+
+        method();
+
 
 
         return root;
@@ -96,16 +118,39 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
         myLoadingButton.showLoadingButton();
         Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.button_go_down);
+
         myLoadingButton.setY(1700);
         myLoadingButton.setAnimation(a);
+        a.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+               // progressBar.setVisibility(VISIBLE);
+               // progressBar2.setVisibility(VISIBLE);
+            }
 
-        loadFragments();
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                loadFragments();
+             //   progressBar.setVisibility(View.INVISIBLE);
+             //   progressBar2.setVisibility(View.INVISIBLE);
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+
+
+
 
 
     }
 
-
     private void loadFragments(){
+
         fragmentTransaction = getChildFragmentManager()
                 .beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fade_in_custom, android.R.anim.fade_out)
@@ -113,6 +158,7 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         fragmentTransaction.setCustomAnimations(R.anim.fade_in_custom, android.R.anim.fade_out)
                 .replace(R.id.StaticFrameLayout2, fragmentStatic2)
                 .commit();
+
     }
 
     private int setGlobalStrings(Integer integer){
@@ -174,5 +220,19 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
                     }
                 });
     }
+    // слушатель
+    @SuppressLint("CheckResult")
+    public void method() {
+        StringsApp stringsApp = new StringsApp();
+        stringsApp.getmObservable().map(value -> {
+            if (value == 1)  myLoadingButton.showDoneButton();
+            return String.valueOf(value);
+        }).subscribe(string -> System.out.println(string));
+    }
+
+
+
+
+
 
 }
