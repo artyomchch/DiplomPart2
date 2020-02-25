@@ -39,6 +39,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -64,6 +66,8 @@ import static com.example.diplompart2.analyze_fragments.static_analyze_1.check_r
 
 
 public class StaticFragment1 extends Fragment {
+
+
 
     //Rotate Loading
     private ProgressBar progressBar;
@@ -208,11 +212,9 @@ public class StaticFragment1 extends Fragment {
 
                     @Override
                     public void onComplete() {
-                        StringsApp sa = new StringsApp();
                         Log.d(TAG, "onComplete: Succses");
                         progressBar.setVisibility(View.INVISIBLE);
-                        sa.setVariableToObserve(1);
-                        sa.getmObservable().onNext(sa.getVariableToObserve());
+
 
 
                     }
@@ -269,4 +271,7 @@ public class StaticFragment1 extends Fragment {
         }
 
    }
+
+
+
 }

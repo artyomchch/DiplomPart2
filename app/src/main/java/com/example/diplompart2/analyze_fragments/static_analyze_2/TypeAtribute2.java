@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TypeAtribute2 {
-
+    private int apkId;
     private String nameApp;
     private String packageName;
     private String versionApp;
@@ -27,13 +27,16 @@ public class TypeAtribute2 {
         this.expanded = expanded;
     }
 
-    public TypeAtribute2(String nameApp, String packageName, String versionApp, String pathApp, ArrayList<String> permissionArray){
+    public TypeAtribute2(int apkId ,String nameApp, String packageName, String versionApp, String pathApp, ArrayList<String> permissionArray){
+        this.apkId = apkId;
         this.nameApp = nameApp;
         this.packageName = packageName;
         this.versionApp = versionApp;
         this.pathApp = pathApp;
         this.permissionArray = permissionArray;
     }
+
+
 
 
 

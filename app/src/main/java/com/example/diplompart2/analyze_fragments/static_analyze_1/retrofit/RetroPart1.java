@@ -17,11 +17,11 @@ public interface RetroPart1 {
 //    Call<Object> updatePart1(@FieldMap Map<String, String> map);
 
     @Headers("Content-Type: application/json")
-    @POST("/parts1")
+    @POST("/devices")
     Call<Object> getPart1(@Body String body);
 
     @Headers("Content-Type: application/json")
-    @POST("/parts2")
+    @POST("/apps")
     Call<Object> getPart2(@Body String body);
 
 

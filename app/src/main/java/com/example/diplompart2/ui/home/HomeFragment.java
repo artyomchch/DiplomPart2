@@ -53,7 +53,7 @@ import io.reactivex.subjects.Subject;
 import static android.view.View.VISIBLE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick {
+public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick, PropertyChangeListener {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 100;
     // Fragments
@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
     private HomeViewModel homeViewModel;
     private static final String TAG = "MaimActivity";
-    private MyLoadingButton myLoadingButton;
+    private static MyLoadingButton myLoadingButton;
 
 
 
@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         //multiThread
         multiThread();
 
-        method();
+
 
 
 
@@ -121,18 +121,19 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
         myLoadingButton.setY(1700);
         myLoadingButton.setAnimation(a);
+
         a.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-               // progressBar.setVisibility(VISIBLE);
-               // progressBar2.setVisibility(VISIBLE);
+//                progressBar.setVisibility(VISIBLE);
+//                progressBar2.setVisibility(VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 loadFragments();
-             //   progressBar.setVisibility(View.INVISIBLE);
-             //   progressBar2.setVisibility(View.INVISIBLE);
+//                progressBar.setVisibility(View.INVISIBLE);
+//                progressBar2.setVisibility(View.INVISIBLE);
 
             }
 
@@ -143,12 +144,8 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         });
 
 
-
-
-
-
     }
-
+    //загрузка фрагментов
     private void loadFragments(){
 
         fragmentTransaction = getChildFragmentManager()
@@ -160,7 +157,7 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
                 .commit();
 
     }
-
+    //запрос на разрешения использования мобильной сети, передача данных в другие классы
     private int setGlobalStrings(Integer integer){
         //Check Permission
         if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()),
@@ -182,7 +179,6 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         Log.d("Threads", Thread.currentThread().getName());
         return integer;
     }
-
     //Кол-во отфильтрованных приложений
     private int countOfApp(){
         List<PackageInfo> packagelist = Objects.requireNonNull(getActivity()).getPackageManager().
@@ -197,7 +193,7 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
         return k;
     }
-
+    // выполнение пересчета приложений в отдельном потоке
     private void multiThread(){
         Observable.just(1)
                 .subscribeOn(Schedulers.io())
@@ -220,19 +216,19 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
                     }
                 });
     }
-    // слушатель
-    @SuppressLint("CheckResult")
-    public void method() {
-        StringsApp stringsApp = new StringsApp();
-        stringsApp.getmObservable().map(value -> {
-            if (value == 1)  myLoadingButton.showDoneButton();
-            return String.valueOf(value);
-        }).subscribe(string -> System.out.println(string));
+    //listener
+    @Override
+    public void propertyChange(PropertyChangeEvent event)  {
+
+        if (event.getPropertyName().equals("MyTextProperty")) {
+            System.out.println(event.getNewValue().toString());
+
+            myLoadingButton.showDoneButton();
+
+            Log.d(TAG, "propertyChange: trigge");
+            System.out.println("Triggered");
+        }
     }
-
-
-
-
 
 
 }

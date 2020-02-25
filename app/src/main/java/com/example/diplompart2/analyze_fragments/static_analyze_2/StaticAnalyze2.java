@@ -26,11 +26,15 @@ import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.Get
 import com.example.diplompart2.analyze_fragments.static_analyze_2.permission.GetPermission;
 import com.example.diplompart2.analyze_fragments.room.Converters;
 import com.example.diplompart2.analyze_fragments.strings.StringsApp;
+import com.example.diplompart2.ui.home.HomeFragment;
 import com.example.myloadingbutton.MyLoadingButton;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 
 import com.google.gson.Gson;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,13 +80,17 @@ public class StaticAnalyze2 extends Fragment {
     private EmployeeStatic1Database db = App.getInstance().getDatabase();  // получение базы данных
     private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
     //apkpermission
-    ArrayList<String> appPermissionArray = new ArrayList<String>();
+    private ArrayList<String> appPermissionArray = new ArrayList<String>();
     //list of arrays
     private static List<TypeAtribute2> listss = new ArrayList<TypeAtribute2>();
+    private static ArrayList listObject = new ArrayList();
     //gson
     private Gson gson = new Gson();
     //URL
     private String URL = "https://aqueous-temple-55115.herokuapp.com";
+    //Listener
+    private String variable = "Initial";
+    private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 
     @Override
@@ -199,8 +207,8 @@ public class StaticAnalyze2 extends Fragment {
     //база данных (локальная/серверная)
     private void room(){
         EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
-        listss.add(new TypeAtribute2(appName, appFullName, appVersion, appPatch, appPermissionArray));
-
+        listss.add(new TypeAtribute2(i+1, appName, appFullName, appVersion, appPatch, appPermissionArray));
+      //  listObject.add(i+1, listss);
         employeeStatic1Dao.insert(employeeStatic2);
 
         Log.d(TAG, "room and json: success");
@@ -231,7 +239,9 @@ public class StaticAnalyze2 extends Fragment {
                     public void onComplete() {
                         Log.d("aaaaaaaaaaaaaa", "onComplete: Succses");
                         progressBar.setVisibility(View.INVISIBLE);
-
+                        HomeFragment homeFragment = new HomeFragment();
+                        addListener(homeFragment);
+                        setVariable("ds");
 
                     }
                 });
@@ -254,7 +264,15 @@ public class StaticAnalyze2 extends Fragment {
         }
     }
 
+    private void addListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
 
+    private void setVariable(String newValue) {
+        String oldValue = variable;
+        variable = newValue;
+        support.firePropertyChange("MyTextProperty", oldValue, newValue);
+    }
 
 
 }
