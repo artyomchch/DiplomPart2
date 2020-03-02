@@ -82,8 +82,8 @@ public class StaticAnalyze2 extends Fragment {
     //apkpermission
     private ArrayList<String> appPermissionArray = new ArrayList<String>();
     //list of arrays
-    private static List<TypeAtribute2> listss = new ArrayList<TypeAtribute2>();
-    private static ArrayList listObject = new ArrayList();
+
+    private static List<TypeAtribute2> app = new ArrayList<TypeAtribute2>();
     //gson
     private Gson gson = new Gson();
     //URL
@@ -193,7 +193,7 @@ public class StaticAnalyze2 extends Fragment {
                         FrameStat2.setBackground(Objects.requireNonNull(getContext())
                                 .getDrawable(R.drawable.fragment_bg));
                         animation();
-                        json = gson.toJson(listss);
+                        json = gson.toJson(app);
                         //Log.d(TAG, "onComplete: "+ json);
                         progressBar.setVisibility(VISIBLE);
                         returnData();
@@ -206,9 +206,12 @@ public class StaticAnalyze2 extends Fragment {
     }
     //база данных (локальная/серверная)
     private void room(){
+        List<TypeAtribute2> listss = new ArrayList<TypeAtribute2>();
         EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
-        listss.add(new TypeAtribute2(i+1, appName, appFullName, appVersion, appPatch, appPermissionArray));
-      //  listObject.add(i+1, listss);
+        listss.add(new TypeAtribute2( appName, appFullName, appVersion, appPatch, appPermissionArray));
+
+        app.add(new TypeAtribute2(i+1, listss));
+
         employeeStatic1Dao.insert(employeeStatic2);
 
         Log.d(TAG, "room and json: success");
@@ -256,7 +259,7 @@ public class StaticAnalyze2 extends Fragment {
                 .build();
         //interface
         RetroPart1 intf = retrofit.create(RetroPart1.class);
-        Call<Object> putPart2 = intf.getPart2("{\"app\" : " + json + "}");
+        Call<Object> putPart2 = intf.getPart2("{\"apps\" : " + json + "}");
         try {
             Response<Object> reer = putPart2.execute();
         } catch (IOException e) {

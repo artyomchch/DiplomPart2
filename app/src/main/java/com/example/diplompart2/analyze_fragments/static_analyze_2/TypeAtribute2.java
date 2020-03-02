@@ -14,6 +14,7 @@ public class TypeAtribute2 {
     private Drawable icon;
     private String permission;
     private ArrayList<String> permissionArray;
+    private List<TypeAtribute2> app;
     private boolean expanded;
 
 
@@ -27,8 +28,7 @@ public class TypeAtribute2 {
         this.expanded = expanded;
     }
 
-    public TypeAtribute2(int apkId ,String nameApp, String packageName, String versionApp, String pathApp, ArrayList<String> permissionArray){
-        this.apkId = apkId;
+    public TypeAtribute2(String nameApp, String packageName, String versionApp, String pathApp, ArrayList<String> permissionArray){
         this.nameApp = nameApp;
         this.packageName = packageName;
         this.versionApp = versionApp;
@@ -36,7 +36,10 @@ public class TypeAtribute2 {
         this.permissionArray = permissionArray;
     }
 
-
+    public TypeAtribute2(int apkId, List<TypeAtribute2> app){
+        this.apkId = apkId;
+        this.app = app;
+    }
 
 
 
