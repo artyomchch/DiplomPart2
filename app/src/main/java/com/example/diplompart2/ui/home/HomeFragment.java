@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,6 +32,8 @@ import com.example.diplompart2.analyze_fragments.strings.StringsApp;
 import com.example.myloadingbutton.MyLoadingButton;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.github.ybq.android.spinkit.style.Pulse;
+import com.github.ybq.android.spinkit.style.Wave;
 
 
 import java.beans.PropertyChangeEvent;
@@ -43,28 +46,31 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.view.View.VISIBLE;
+
 public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick, PropertyChangeListener {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 100;
     // Fragments
-    private Fragment fragmentStatic1, fragmentStatic2, fragmentDynamic;
+    private static Fragment fragmentStatic1, fragmentStatic2, fragmentDynamic;
     private FragmentTransaction fragmentTransaction;
-
+    // FrameLayout
+    private static FrameLayout frameDyna;
 
     private HomeViewModel homeViewModel;
     private static final String TAG = "MaimActivity";
     private static MyLoadingButton myLoadingButton;
 
     //TextView
-    private TextView dynaText, statText;
+    private static TextView dynaText, statText, warText;
     //ImageView
     private ImageView dotLine;
 
 
     //Rotate Loading
-    private ProgressBar progressBar;
-    private ProgressBar progressBar2;
-    private Sprite FadingCircle = new FadingCircle(); // sprite for animation
+    //private static ProgressBar progressBar;
+   // private ProgressBar progressBar2;
+   // private Sprite Pulse = new Pulse(); // sprite for animation
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,13 +80,16 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         //TextView
         dynaText = root.findViewById(R.id.text_dyna);
         statText = root.findViewById(R.id.text_stat);
+        warText = root.findViewById(R.id.war_stat);
         //ImageView
         dotLine = root.findViewById(R.id.dot_line);
+        //FrameLayout
+        frameDyna = root.findViewById(R.id.DynamicFrameLayout);
 
 
         //Rotate Loading
-        progressBar = root.findViewById(R.id.spin_kit_home_1);
-        progressBar2 = root.findViewById(R.id.spin_kit_home_2);
+     //   progressBar = root.findViewById(R.id.spin_kit);
+       // progressBar2 = root.findViewById(R.id.spin_kit_home_2);
 
         //Loading button
         myLoadingButton = root.findViewById(R.id.my_loading_button);
@@ -97,8 +106,8 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
 
         //progresbar
-        progressBar.setIndeterminateDrawable(FadingCircle);
-        progressBar2.setIndeterminateDrawable(FadingCircle);
+//        progressBar.setIndeterminateDrawable(Pulse);
+      //  progressBar2.setIndeterminateDrawable(FadingCircle);
         //multiThread
         multiThread();
 
@@ -119,15 +128,16 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         myLoadingButton.setY(1650);
         myLoadingButton.setAnimation(a);
 
-        dynaText.setVisibility(View.VISIBLE);
-        statText.setVisibility(View.VISIBLE);
-        dotLine.setVisibility(View.VISIBLE);
-
+        dynaText.setVisibility(VISIBLE);
+        statText.setVisibility(VISIBLE);
+        dotLine.setVisibility(VISIBLE);
+        warText.setVisibility(VISIBLE);
+       // progressBar.setVisibility(View.VISIBLE);
 
         a.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-//                progressBar.setVisibility(VISIBLE);
+//                progressBar.setVisibility(View.VISIBLE);
 //                progressBar2.setVisibility(VISIBLE);
             }
 
@@ -229,14 +239,15 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
             System.out.println(event.getNewValue().toString());
 
             myLoadingButton.showDoneButton();
-
+//            progressBar.setVisibility(View.INVISIBLE);
 
 
 
 
             //загрузка фрагмента "Динамический анализ"
-
-
+       //     progressBar.setVisibility(View.INVISIBLE);
+            frameDyna.setVisibility(VISIBLE);
+            warText.setVisibility(View.INVISIBLE);
 
             Log.d(TAG, "propertyChange: trigger");
             System.out.println("Triggered");

@@ -64,30 +64,6 @@
 
     </FrameLayout>
 
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/spin_kit_home_1"
-        style="@style/SpinKitView.FadingCircle"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="400dp"
-        android:visibility="invisible"
-        app:SpinKit_Color="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/spin_kit_home_2"
-        style="@style/SpinKitView.FadingCircle"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="220dp"
-        android:visibility="invisible"
-        app:SpinKit_Color="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <ImageView
         android:id="@+id/dot_line"
         android:layout_width="0dp"
@@ -117,15 +93,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <FrameLayout
         android:id="@+id/DynamicFrameLayout"
         android:layout_width="0dp"
         android:layout_height="140dp"
         android:layout_marginTop="10dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_dyna">
 
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/war_stat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:text="Подождите завершения статического анализа!!!"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
