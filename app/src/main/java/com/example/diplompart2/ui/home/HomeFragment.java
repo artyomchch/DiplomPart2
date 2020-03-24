@@ -1,11 +1,9 @@
 package com.example.diplompart2.ui.home;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.drm.DrmStore;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,51 +11,43 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 
 import com.example.diplompart2.R;
+import com.example.diplompart2.analyze_fragments.dynamic_analyze.DynamicFragment;
 import com.example.diplompart2.analyze_fragments.static_analyze_1.StaticFragment1;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.StaticAnalyze2;
 import com.example.diplompart2.analyze_fragments.strings.StringsApp;
 import com.example.myloadingbutton.MyLoadingButton;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
-import com.google.common.base.Stopwatch;
 
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
-
-import static android.view.View.VISIBLE;
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick, PropertyChangeListener {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 100;
     // Fragments
-    private Fragment fragmentStatic1, fragmentStatic2;
+    private Fragment fragmentStatic1, fragmentStatic2, fragmentDynamic;
     private FragmentTransaction fragmentTransaction;
 
 
@@ -65,7 +55,10 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
     private static final String TAG = "MaimActivity";
     private static MyLoadingButton myLoadingButton;
 
-
+    //TextView
+    private TextView dynaText, statText;
+    //ImageView
+    private ImageView dotLine;
 
 
     //Rotate Loading
@@ -78,14 +71,13 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
+        //TextView
+        dynaText = root.findViewById(R.id.text_dyna);
+        statText = root.findViewById(R.id.text_stat);
+        //ImageView
+        dotLine = root.findViewById(R.id.dot_line);
 
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
         //Rotate Loading
         progressBar = root.findViewById(R.id.spin_kit_home_1);
         progressBar2 = root.findViewById(R.id.spin_kit_home_2);
@@ -95,9 +87,14 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         myLoadingButton.setMyButtonClickListener(this);
 
 
+
         //fragments
        fragmentStatic1 = new StaticFragment1();
        fragmentStatic2 = new StaticAnalyze2();
+       fragmentDynamic = new DynamicFragment();
+
+
+
 
         //progresbar
         progressBar.setIndeterminateDrawable(FadingCircle);
@@ -119,8 +116,13 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         myLoadingButton.showLoadingButton();
         Animation a = AnimationUtils.loadAnimation(getContext(), R.anim.button_go_down);
 
-        myLoadingButton.setY(1700);
+        myLoadingButton.setY(1650);
         myLoadingButton.setAnimation(a);
+
+        dynaText.setVisibility(View.VISIBLE);
+        statText.setVisibility(View.VISIBLE);
+        dotLine.setVisibility(View.VISIBLE);
+
 
         a.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -153,8 +155,11 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         fragmentTransaction.setCustomAnimations(R.anim.fade_in_custom, android.R.anim.fade_out)
                 .replace(R.id.StaticFrameLayout, fragmentStatic1);
         fragmentTransaction.setCustomAnimations(R.anim.fade_in_custom, android.R.anim.fade_out)
-                .replace(R.id.StaticFrameLayout2, fragmentStatic2)
+                .replace(R.id.StaticFrameLayout2, fragmentStatic2);
+        fragmentTransaction.setCustomAnimations(R.anim.fade_in_custom, android.R.anim.fade_out)
+                .replace(R.id.DynamicFrameLayout, fragmentDynamic)
                 .commit();
+
 
     }
     //запрос на разрешения использования мобильной сети, передача данных в другие классы
@@ -225,7 +230,15 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
             myLoadingButton.showDoneButton();
 
-            Log.d(TAG, "propertyChange: trigge");
+
+
+
+
+            //загрузка фрагмента "Динамический анализ"
+
+
+
+            Log.d(TAG, "propertyChange: trigger");
             System.out.println("Triggered");
         }
     }

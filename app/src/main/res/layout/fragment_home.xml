@@ -5,38 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
-        android:id="@+id/text_home"
+        android:id="@+id/text_stat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
+        android:text="Статический анализ"
         android:textAlignment="center"
         android:textSize="20sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@+id/dot_line" />
 
     <com.example.myloadingbutton.MyLoadingButton
         android:id="@+id/my_loading_button"
         android:layout_width="319dp"
         android:layout_height="60dp"
-        android:layout_marginTop="263dp"
         android:layout_marginBottom="402dp"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_home"
         app:mlb_animationDuration="300"
         app:mlb_backgroundColor="#FF6D00"
         app:mlb_label="Start testing"
-
         app:mlb_labelColor="#ffffff"
         app:mlb_labelSize="10sp"
         app:mlb_loaderColor="#ffffff"
-        app:mlb_setNormalAfterError="false" >
+        app:mlb_setNormalAfterError="false">
 
     </com.example.myloadingbutton.MyLoadingButton>
 
@@ -48,9 +48,10 @@
         android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_home">
+        app:layout_constraintTop_toBottomOf="@+id/text_stat">
 
     </FrameLayout>
+
 
     <FrameLayout
         android:id="@+id/StaticFrameLayout2"
@@ -58,7 +59,6 @@
         android:layout_height="163dp"
         android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/StaticFrameLayout">
 
@@ -69,8 +69,8 @@
         style="@style/SpinKitView.FadingCircle"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="165dp"
-        android:layout_marginBottom="600dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="400dp"
         android:visibility="invisible"
         app:SpinKit_Color="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -81,11 +81,51 @@
         style="@style/SpinKitView.FadingCircle"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="165dp"
-        android:layout_marginBottom="420dp"
+        android:layout_marginEnd="160dp"
+        android:layout_marginBottom="220dp"
         android:visibility="invisible"
         app:SpinKit_Color="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/dot_line"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layerType="software"
+        android:src="@drawable/dot"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DynamicFrameLayout" />
+
+    <TextView
+        android:id="@+id/text_dyna"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Динамический анализ"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/DynamicFrameLayout"
+        android:layout_width="0dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_dyna">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

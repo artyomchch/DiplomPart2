@@ -73,5 +73,7 @@ dependencies {
     //Retrofit + GSON
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    //MaterialSpiner
+    implementation 'com.jaredrummler:material-spinner:1.3.1'
 
 }
