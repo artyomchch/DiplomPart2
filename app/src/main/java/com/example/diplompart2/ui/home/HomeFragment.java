@@ -38,6 +38,7 @@ import com.github.ybq.android.spinkit.style.Wave;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,6 +66,9 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
     private static TextView dynaText, statText, warText;
     //ImageView
     private ImageView dotLine;
+    //Listener
+    private String variable = "Initial";
+    private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 
     //Rotate Loading
@@ -87,15 +91,9 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
         frameDyna = root.findViewById(R.id.DynamicFrameLayout);
 
 
-        //Rotate Loading
-     //   progressBar = root.findViewById(R.id.spin_kit);
-       // progressBar2 = root.findViewById(R.id.spin_kit_home_2);
-
         //Loading button
         myLoadingButton = root.findViewById(R.id.my_loading_button);
         myLoadingButton.setMyButtonClickListener(this);
-
-
 
         //fragments
        fragmentStatic1 = new StaticFragment1();
@@ -103,17 +101,7 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
        fragmentDynamic = new DynamicFragment();
 
 
-
-
-        //progresbar
-//        progressBar.setIndeterminateDrawable(Pulse);
-      //  progressBar2.setIndeterminateDrawable(FadingCircle);
-        //multiThread
         multiThread();
-
-
-
-
 
         return root;
     }
@@ -240,7 +228,9 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
 
             myLoadingButton.showDoneButton();
 //            progressBar.setVisibility(View.INVISIBLE);
-
+            DynamicFragment dynamicFragment = new DynamicFragment();
+            addListener(dynamicFragment);
+            setVariable("ds");
 
 
 
@@ -252,6 +242,16 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
             Log.d(TAG, "propertyChange: trigger");
             System.out.println("Triggered");
         }
+    }
+    //отправка сигнала об окончании процесса в фрагмент
+    private void addListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+    //отправка сигнала об окончании процесса в фрагмент
+    private void setVariable(String newValue) {
+        String oldValue = variable;
+        variable = newValue;
+        support.firePropertyChange("getApplication", oldValue, newValue);
     }
 
 

@@ -19,14 +19,17 @@ public interface EmployeeStatic1Dao {
 
     @Query("SELECT * FROM table_static_2")
     Flowable<List<EmployeeStatic2>> getAll();
-
+    // выборка по айди
     @Query("SELECT * FROM table_static_2 WHERE apkId = :id")
-    //Flowable<EmployeeStatic2> getById(long id);
     EmployeeStatic2 getById(long id);
+
+//    @Query("SELECT apkId, apkName,apkFullName FROM table_static_2")
+//    EmployeeStatic2 getNameApp();
 
     @Query("SELECT * FROM table_static_1")
     Single<EmployeeStatic1> getAll2();
 
+    //получение кол-во приложений
     @Query("SELECT COUNT(*) FROM table_static_2")
     Single<Integer> getRowCount();
 

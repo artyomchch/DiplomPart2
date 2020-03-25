@@ -36,6 +36,11 @@ public class TypeAtribute2 {
         this.permissionArray = permissionArray;
     }
 
+    public TypeAtribute2(String nameApp, String packageName){
+        this.nameApp = nameApp;
+        this.packageName = packageName;
+    }
+
     public TypeAtribute2(int apkId, List<TypeAtribute2> app){
         this.apkId = apkId;
         this.app = app;

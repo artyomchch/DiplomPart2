@@ -1,40 +1,118 @@
 package com.example.diplompart2.analyze_fragments.dynamic_analyze;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.diplompart2.R;
+import com.example.diplompart2.analyze_fragments.room.App;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Dao;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
+import com.example.diplompart2.analyze_fragments.room.static_two.EmployeeStatic2;
+import com.example.diplompart2.analyze_fragments.static_analyze_2.TypeAtribute2;
 import com.google.android.material.snackbar.Snackbar;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
-public class DynamicFragment extends Fragment {
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
+
+public class DynamicFragment extends Fragment implements PropertyChangeListener {
+    private EmployeeStatic1Database db = App.getInstance().getDatabase(); // получение базы данных
+    private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
+    //ArrayList
+    private ArrayList<String> apkName = new ArrayList<>();
+    private ArrayList <String> apkFullName = new ArrayList<>();
+    //MaterialSpiner
+    private MaterialSpinner spinner;
+    //String
+    private String openApp = "";
+    //Button
+    Button openAppButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_dynamic, container, false);
-        MaterialSpinner spinner =  root.findViewById(R.id.spinner);
-        spinner.setItems("Ice Cream Sandwich", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow"
-                , "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow"
-                , "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow"
-                , "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow"
-                , "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow"
-                , "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow"
-                , "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow"
-                , "Jelly Bean", "KitKat", "Lollipop", "Marshmallow", "Jelly Bean", "KitKat", "Lollipop", "Marshmallow");
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+        spinner =  root.findViewById(R.id.spinner);
+        openAppButton = (Button) root.findViewById(R.id.open_app);
 
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
+        getAppTitleFromRoom();
+
+        openAppButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent launchIntent = Objects.requireNonNull(getContext()).getPackageManager().getLaunchIntentForPackage(openApp);
+                if (launchIntent != null) {
+                    startActivity(launchIntent);//null pointer check in case package name was not found
+                }
+                else {
+                    Snackbar.make(view, "Приложение не выбрано!" , Snackbar.LENGTH_LONG).show();
+                }
             }
         });
+
         return root;
     }
+
+
+   // Получение информации о производа данных
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        if (propertyChangeEvent.getPropertyName().equals("getApplication")) {
+            // здесь будет процедура в отдельном потоке получение данных об приложениях
+
+        }
+    }
+
+
+    private void getAppTitleFromRoom(){
+        db.employeeStatic1Dao().getAll()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<EmployeeStatic2>>() {
+                    @Override
+                    public void accept(List<EmployeeStatic2> employees) throws Exception {
+                        for (int i =0; i <employees.size(); i++){
+                            apkName.add(employees.get(i).apkName);
+                            apkFullName.add(employees.get(i).apkFullName);
+                        }
+                        openApp = apkFullName.get(0);
+                        spinner.setItems(apkName);
+                        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+                            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
+                                openApp = apkFullName.get(position);
+                            }
+                        });
+                        }
+                });
+
+
+    }
+
+
+
 }
