@@ -44,5 +44,8 @@ public interface EmployeeStatic1Dao {
     void update(EmployeeStatic1 employeeStatic1);
 
     @Delete
-    void delete(EmployeeStatic1 employeeStatic1);
+    void delete(EmployeeStatic2 employeeStatic2);
+
+    @Query("DELETE FROM table_static_2")
+    void deleteAllItems();
 }

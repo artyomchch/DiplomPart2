@@ -26,6 +26,9 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.diplompart2.R;
 import com.example.diplompart2.analyze_fragments.dynamic_analyze.DynamicFragment;
+import com.example.diplompart2.analyze_fragments.room.App;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Dao;
+import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
 import com.example.diplompart2.analyze_fragments.static_analyze_1.StaticFragment1;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.StaticAnalyze2;
 import com.example.diplompart2.analyze_fragments.strings.StringsApp;
@@ -50,7 +53,9 @@ import io.reactivex.schedulers.Schedulers;
 import static android.view.View.VISIBLE;
 
 public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingButtonClick, PropertyChangeListener {
-
+    //Database
+    private EmployeeStatic1Database db = App.getInstance().getDatabase();  // получение базы данных
+    private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 100;
     // Fragments
     private static Fragment fragmentStatic1, fragmentStatic2, fragmentDynamic;
@@ -162,6 +167,8 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
     }
     //запрос на разрешения использования мобильной сети, передача данных в другие классы
     private int setGlobalStrings(Integer integer){
+        //clear database
+        employeeStatic1Dao.deleteAllItems();
         //Check Permission
         if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()),
                 Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {

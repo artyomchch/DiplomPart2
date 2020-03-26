@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -113,8 +114,10 @@ public class StaticAnalyze2 extends Fragment {
         //countApp
         CountApp.setText(String.valueOf(sa.getCountOfApp()));
         ProcApp.setText("0 / "+ String.valueOf(sa.getCountOfApp()));
-
+       // employeeStatic1Dao.deleteAllItems();
         mainTask();
+
+
 
 
         return root;
@@ -206,6 +209,7 @@ public class StaticAnalyze2 extends Fragment {
     }
     //база данных (локальная/серверная)
     private void room(){
+
         List<TypeAtribute2> listss = new ArrayList<TypeAtribute2>();
         EmployeeStatic2 employeeStatic2 = new EmployeeStatic2(i+1,appName,appFullName,appVersion,appPatch,appPermissions);
         listss.add(new TypeAtribute2( appName, appFullName, appVersion, appPatch, appPermissionArray));

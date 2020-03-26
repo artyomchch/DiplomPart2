@@ -40,16 +40,16 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class DynamicFragment extends Fragment implements PropertyChangeListener {
     private EmployeeStatic1Database db = App.getInstance().getDatabase(); // получение базы данных
-    private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
+   // private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
     //ArrayList
-    private ArrayList<String> apkName = new ArrayList<>();
-    private ArrayList <String> apkFullName = new ArrayList<>();
+    private static ArrayList<String> apkName = new ArrayList<>();
+    private static ArrayList <String> apkFullName = new ArrayList<>();
     //MaterialSpiner
-    private MaterialSpinner spinner;
+    private static MaterialSpinner spinner;
     //String
-    private String openApp = "";
+    private static String openApp = "";
     //Button
-    Button openAppButton;
+    private Button openAppButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,8 +58,7 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
         View root = inflater.inflate(R.layout.fragment_dynamic, container, false);
         spinner =  root.findViewById(R.id.spinner);
         openAppButton = (Button) root.findViewById(R.id.open_app);
-
-        getAppTitleFromRoom();
+        hookOfApp("sdsd", 3);
 
         openAppButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,15 +82,16 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         if (propertyChangeEvent.getPropertyName().equals("getApplication")) {
             // здесь будет процедура в отдельном потоке получение данных об приложениях
-
+            getAppTitleFromRoom();
+            setDataSpinner();
         }
     }
 
-
+    // получение данных из бд
     private void getAppTitleFromRoom(){
         db.employeeStatic1Dao().getAll()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<EmployeeStatic2>>() {
+                .subscribe(new  Consumer<List<EmployeeStatic2>>() {
                     @Override
                     public void accept(List<EmployeeStatic2> employees) throws Exception {
                         for (int i =0; i <employees.size(); i++){
@@ -100,19 +100,26 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
                         }
                         openApp = apkFullName.get(0);
                         spinner.setItems(apkName);
-                        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-                            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
-                                openApp = apkFullName.get(position);
-                            }
-                        });
                         }
                 });
 
 
     }
+    // отображения данных в спиннере
+    private void setDataSpinner(){
 
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
+                openApp = apkFullName.get(position);
+                hookOfApp(openApp, position);
+            }
+        });
+    }
+    private void hookOfApp(String nameApp, int position){
+
+    }
 
 
 }
