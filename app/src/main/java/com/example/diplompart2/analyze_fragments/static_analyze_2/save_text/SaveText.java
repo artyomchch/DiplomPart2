@@ -15,6 +15,7 @@ public class SaveText {
 
     private final static String FILE_NAME = "part1.json";
 
+
     public void saveText(String json, Context context){
 
         FileOutputStream fos = null;

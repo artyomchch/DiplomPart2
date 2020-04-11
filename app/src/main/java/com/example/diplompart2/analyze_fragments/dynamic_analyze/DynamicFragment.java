@@ -22,6 +22,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,6 +51,7 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
     private static String openApp = "";
     //Button
     private Button openAppButton;
+    private Button sendInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,17 +60,34 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
         View root = inflater.inflate(R.layout.fragment_dynamic, container, false);
         spinner =  root.findViewById(R.id.spinner);
         openAppButton = (Button) root.findViewById(R.id.open_app);
+        sendInfo = root.findViewById(R.id.sendToServer);
         hookOfApp("sdsd", 3);
 
         openAppButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                test();
                 Intent launchIntent = Objects.requireNonNull(getContext()).getPackageManager().getLaunchIntentForPackage(openApp);
                 if (launchIntent != null) {
                     startActivity(launchIntent);//null pointer check in case package name was not found
                 }
                 else {
                     Snackbar.make(view, "Приложение не выбрано!" , Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+        sendInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SaveJson saveJson = new SaveJson();
+                try {
+                    saveJson.jsonToObject();
+                    saveJson.setParamName();
+                    saveJson.write();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -118,6 +137,11 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
         });
     }
     private void hookOfApp(String nameApp, int position){
+
+    }
+    private void stopAppHook(){}
+
+    private void test(){
 
     }
 
