@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.diplompart2.R;
 import com.example.diplompart2.analyze_fragments.room.App;
@@ -81,16 +82,13 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
         sendInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SaveJson saveJson = new SaveJson();
-                try {
-                    saveJson.jsonToObject();
-                    saveJson.setParamName();
-                    saveJson.write();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Snackbar.make(view, "Данные отправляються", Snackbar.LENGTH_LONG).show();
+                saveTextMultithreading();
+
             }
         });
+
+
 
         return root;
     }
@@ -104,6 +102,8 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
             getAppTitleFromRoom();
             setDataSpinner();
         }
+
+
     }
 
     // получение данных из бд
@@ -144,6 +144,40 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
     private void test(){
 
     }
+    //запись и отправка данных на сервер
+    private void saveText() throws IOException {
+        SaveJson saveJson = new SaveJson(Objects.requireNonNull(getContext()).getApplicationContext());
+        saveJson.jsonToObject();
+        saveJson.setParamName();
+        saveJson.write();
+    }
+    // использование другого потока
+    private void saveTextMultithreading(){
+        Observable.just(1)
+                .subscribeOn(Schedulers.computation())
+                .doOnNext(integer ->saveText())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
 
+                    @Override
+                    public void onNext(Integer integer) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                       // XposedBridge.log(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+
+                    }
+                });
+    }
 }

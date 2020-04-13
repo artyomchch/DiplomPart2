@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.diplompart2.R;
 import com.example.diplompart2.analyze_fragments.dynamic_analyze.DynamicFragment;
+import com.example.diplompart2.analyze_fragments.dynamic_analyze.SaveJson;
 import com.example.diplompart2.analyze_fragments.room.App;
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Dao;
 import com.example.diplompart2.analyze_fragments.room.static_one.EmployeeStatic1Database;
@@ -37,6 +38,7 @@ import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.github.ybq.android.spinkit.style.Pulse;
 import com.github.ybq.android.spinkit.style.Wave;
+import com.google.android.material.snackbar.Snackbar;
 
 
 import java.beans.PropertyChangeEvent;
@@ -249,6 +251,9 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
             Log.d(TAG, "propertyChange: trigger");
             System.out.println("Triggered");
         }
+
+
+
     }
     //отправка сигнала об окончании процесса в фрагмент
     private void addListener(PropertyChangeListener listener) {

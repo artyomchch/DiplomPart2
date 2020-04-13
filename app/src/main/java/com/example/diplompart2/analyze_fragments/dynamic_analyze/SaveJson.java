@@ -1,9 +1,15 @@
 package com.example.diplompart2.analyze_fragments.dynamic_analyze;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.diplompart2.analyze_fragments.static_analyze_2.TypeAtribute2;
+import com.example.diplompart2.ui.home.HomeFragment;
 import com.google.gson.Gson;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,15 +28,31 @@ public class SaveJson {
     private static ArrayList<String> javaNetUri = new ArrayList<>(); //#u
 
     private static ArrayList<String> javaIoFileDub = new ArrayList<>(); //#f2
-//    private static ArrayList<String> javaNetUriDub = new ArrayList<>(); //#u2
+    private static ArrayList<String> javaNetUriDub = new ArrayList<>(); //#u2
 
     private static ArrayList<String> allMethodsOfHooks = new ArrayList<>();
-    private static ArrayList<String> deDupStringList;
+    private static ArrayList<String> deDupStringList; // обработка файлов
+    private static ArrayList<String> deDupStringListUri; // обработка url;
+
+    private static ArrayList<URL> listURL = new ArrayList<URL>();
+
+    HomeFragment homeFragment = new HomeFragment();
+    //Listener
+    private String variable = "Initial";
+    private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 
+    // variable to hold context
+    private Context context;
+
+//save the context recievied via constructor in a local variable
+
+    public SaveJson(Context context){
+        this.context=context;
+    }
 
 
-    // получили данные
+    // получаем данные
     public String read() throws IOException {
 
         // инициализируем поток вывода из файлу
@@ -97,31 +119,35 @@ public class SaveJson {
 
         }
         //обработка файлов
-        String paramFile = "";
         deDupStringList = new ArrayList<>(new HashSet<>(javaIoFile));
-//        int c = 1;
-//        for(int i = 0; i < javaIoFile.size(); i++){
-//            paramFile = javaIoFile.get(i);
-//            for (int j = c; j < javaIoFile.size(); j++){
-//                if (javaIoFile.get(j).equals(paramFile)){
-//                    javaIoFile.remove(j);
-//                }
-//            }
-//            c++;
-//        }
+
         // обработка url
-//        String paramUrl;
-//
-//        for (int i = 0; i < javaNetUri.size(); i++){
-//            int c = 0;
-//            StringBuffer timeToUri = new StringBuffer(javaNetUri.get(i));
-//            ArrayList<String> times = new ArrayList<>();
-//            String uri = timeToUri.substring(14);
-//            String time = timeToUri.substring(0,13);
-//            for (int j = c; j< javaNetUri.size(); j++){
-//
-//            }
-//        }
+        deDupStringListUri = new ArrayList<>(new HashSet<>(javaNetUri));
+        javaNetUri = deDupStringListUri;
+
+        for (int i = 0; i < javaNetUri.size(); i++){
+            int c = 1;
+            StringBuilder timeToUri = new StringBuilder(javaNetUri.get(i));
+            ArrayList<String> times = new ArrayList<>();
+            String uri = timeToUri.substring(14);
+            String time = timeToUri.substring(0,13);
+            times.add(time);
+            for (int j = c; j< javaNetUri.size(); j++){
+                StringBuilder timeToUriDub = new StringBuilder(javaNetUri.get(j));
+                String uriDub = timeToUriDub.substring(14);
+                if (uri.equals(uriDub)) {
+                    if (!time.equals(timeToUriDub.substring(0,13))){
+                        times.add(timeToUriDub.substring(0,13));
+                    }
+                    javaNetUri.remove(c);
+                }
+                else
+                    c++;
+            }
+//            Gson gsonUri = new Gson();
+//            //URL url = new URL(uri, times);
+            listURL.add(new URL(uri, times));
+        }
 
 
     }
@@ -135,11 +161,12 @@ public class SaveJson {
                 androidViewInputmethodBaseInputConnection,
                 javaLangReflectMethod,
                 deDupStringList,
-                javaNetUri
+                listURL
                 );
         return gson.toJson(dynaString);
     }
 
+    //записываем данные в файл
     public void write() throws IOException {
 
         // открываем поток ввода в файл
@@ -155,6 +182,22 @@ public class SaveJson {
         // только после закрытия потока записи,
         // данные попадают в файл
         outputStreamFile.close();
+
+        Toast toast = Toast.makeText(context,
+                "Данные отправленны на сервер", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+
+    //отправка сигнала об окончании процесса в фрагмент
+    private void addListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+    //отправка сигнала об окончании процесса в фрагмент
+    private void setVariable(String newValue) {
+        String oldValue = variable;
+        variable = newValue;
+        support.firePropertyChange("getApplication", oldValue, newValue);
     }
 
 }

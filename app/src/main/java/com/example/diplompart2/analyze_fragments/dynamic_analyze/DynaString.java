@@ -9,15 +9,16 @@ public class DynaString {
     private  ArrayList<String> androidViewInputmethodBaseInputConnection = new ArrayList<>();   //#4
     private  ArrayList<String> javaLangReflectMethod = new ArrayList<>();   //#5
     private  ArrayList<String> javaIoFile = new ArrayList<>(); //#f
-    private  ArrayList<String> javaNetUri = new ArrayList<>(); //#u
+    private  ArrayList<URL> javaNetUri = new ArrayList<>(); //#u
 
 
     public DynaString(ArrayList<String> androidAccountsAccount,
                       ArrayList<String> androidServiceVoiceVoiceInteractionSession,
                       ArrayList<String> androidTelephonyPhoneStateListener,
                       ArrayList<String> androidViewInputmethodBaseInputConnection,
-                      ArrayList<String> javaLangReflectMethod, ArrayList<String> javaIoFile,
-                      ArrayList<String> javaNetUri) {
+                      ArrayList<String> javaLangReflectMethod,
+                      ArrayList<String> javaIoFile,
+                      ArrayList<URL> javaNetUri) {
         this.androidAccountsAccount = androidAccountsAccount;
         this.androidServiceVoiceVoiceInteractionSession = androidServiceVoiceVoiceInteractionSession;
         this.androidTelephonyPhoneStateListener = androidTelephonyPhoneStateListener;
@@ -26,7 +27,6 @@ public class DynaString {
         this.javaIoFile = javaIoFile;
         this.javaNetUri = javaNetUri;
     }
-
 
     public ArrayList<String> getAllMethodsOfHooks() {
         return allMethodsOfHooks;
