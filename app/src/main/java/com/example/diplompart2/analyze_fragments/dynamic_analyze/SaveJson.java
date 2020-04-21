@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.diplompart2.analyze_fragments.static_analyze_1.retrofit.RetroPart1;
 import com.example.diplompart2.analyze_fragments.static_analyze_2.TypeAtribute2;
 import com.example.diplompart2.ui.home.HomeFragment;
 import com.google.gson.Gson;
@@ -17,22 +18,40 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
 public class SaveJson {
 
-    private static ArrayList<String> androidAccountsAccount = new ArrayList<>();   //#1
-    private static ArrayList<String> androidServiceVoiceVoiceInteractionSession = new ArrayList<>();   //#2
-    private static ArrayList<String> androidTelephonyPhoneStateListener = new ArrayList<>();   //#3
-    private static ArrayList<String> androidViewInputmethodBaseInputConnection = new ArrayList<>();   //#4
-    private static ArrayList<String> javaLangReflectMethod = new ArrayList<>();   //#5
+    private static final String URL = "https://aqueous-temple-55115.herokuapp.com" ;
+    private static String apkId = "2";
+    private static String apk_name = "This";
+    private static ArrayList<String> javaSecurityMessageDigest = new ArrayList<>();   //#1
+    private static ArrayList<String> javaxCryptoCipher = new ArrayList<>();   //#2
+    private static ArrayList<String> javaLangSystem = new ArrayList<>();   //#3
+    private static ArrayList<String> androidHardwareCamera = new ArrayList<>();   //#4
+    private static ArrayList<String> androidTelephonySmsManager = new ArrayList<>();   //#5
+    private static ArrayList<String> androidContentContentResolver = new ArrayList<>();   //#6
+    private static ArrayList<String> androidLocationLocationManager = new ArrayList<>();   //#7
+    private static ArrayList<String> androidContentContext = new ArrayList<>();   //#8
     private static ArrayList<String> javaIoFile = new ArrayList<>(); //#f
     private static ArrayList<String> javaNetUri = new ArrayList<>(); //#u
+    private static ArrayList<String> javaNetUrl = new ArrayList<>(); //#l
+    private static ArrayList<String> javaNetServerSocket = new ArrayList<>(); //s
+
 
     private static ArrayList<String> javaIoFileDub = new ArrayList<>(); //#f2
     private static ArrayList<String> javaNetUriDub = new ArrayList<>(); //#u2
 
     private static ArrayList<String> allMethodsOfHooks = new ArrayList<>();
     private static ArrayList<String> deDupStringList; // обработка файлов
-    private static ArrayList<String> deDupStringListUri; // обработка url;
+    private static ArrayList<String> deDupStringListUri; // обработка uri;
+    private static ArrayList<String> deDupStringListUrl; // обработка url;
+    private static ArrayList<String> deDupStringListSocket; // обработка socket;
+
 
     private static ArrayList<URL> listURL = new ArrayList<URL>();
 
@@ -41,6 +60,14 @@ public class SaveJson {
     private String variable = "Initial";
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
 
+
+    public static void setApkId(String apkId) {
+        SaveJson.apkId = apkId;
+    }
+
+    public static void setApk_name(String apk_name) {
+        SaveJson.apk_name = apk_name;
+    }
 
     // variable to hold context
     private Context context;
@@ -101,27 +128,39 @@ public class SaveJson {
             //Log.d("I/EdXposed-Bridge:", String.valueOf(firstIndex));
 
             if (mainIndex.equals("1")) {
-                androidAccountsAccount.add(param);
+                javaSecurityMessageDigest.add(param);
             } else if (mainIndex.equals("2")) {
-                androidServiceVoiceVoiceInteractionSession.add(param);
+                javaxCryptoCipher.add(param);
             } else if (mainIndex.equals("3")) {
-                androidTelephonyPhoneStateListener.add(param);
+                javaLangSystem.add(param);
             } else if (mainIndex.equals("4")) {
-                androidViewInputmethodBaseInputConnection.add(param);
+                androidHardwareCamera.add(param);
             } else if (mainIndex.equals("5")) {
-                javaLangReflectMethod.add(param);
+                androidTelephonySmsManager.add(param);
+            } else if (mainIndex.equals("6")) {
+                androidContentContentResolver.add(param);
+            } else if (mainIndex.equals("7")) {
+                androidLocationLocationManager.add(param);
+            } else if (mainIndex.equals("8")) {
+                androidContentContext.add(param);
             } else if (mainIndex.equals("f")) {
                 javaIoFile.add(param);
             } else if (mainIndex.equals("u")) {
-                //Log.d("I/EdXposed-Bridge:", javaNetUri.get(5));
                 javaNetUri.add(param);
+            } else if (mainIndex.equals("l")) {
+                javaNetUrl.add(param);
+            } else if (mainIndex.equals("s")) {
+                javaNetServerSocket.add(param);
             }
 
         }
         //обработка файлов
         deDupStringList = new ArrayList<>(new HashSet<>(javaIoFile));
-
-        // обработка url
+        //обработка url
+        javaNetUrl = new ArrayList<>(new HashSet<>(javaNetUrl));
+        //обработка socket
+        javaNetServerSocket = new ArrayList<>(new HashSet<>(javaNetServerSocket));
+        // обработка uri
         deDupStringListUri = new ArrayList<>(new HashSet<>(javaNetUri));
         javaNetUri = deDupStringListUri;
 
@@ -155,13 +194,21 @@ public class SaveJson {
     //переводим обратно данные в json
     public String objectToJson(){
         Gson gson = new Gson();
-        DynaString dynaString = new DynaString(androidAccountsAccount,
-                androidServiceVoiceVoiceInteractionSession,
-                androidTelephonyPhoneStateListener,
-                androidViewInputmethodBaseInputConnection,
-                javaLangReflectMethod,
+        DynaString dynaString = new DynaString(
+                apkId,
+                apk_name,
+                javaSecurityMessageDigest,
+                javaxCryptoCipher,
+                javaLangSystem,
+                androidHardwareCamera,
+                androidTelephonySmsManager,
+                androidContentContentResolver,
+                androidLocationLocationManager,
+                androidContentContext,
                 deDupStringList,
-                listURL
+                listURL,
+                javaNetUrl,
+                javaNetServerSocket
                 );
         return gson.toJson(dynaString);
     }
@@ -186,6 +233,25 @@ public class SaveJson {
         Toast toast = Toast.makeText(context,
                 "Данные отправленны на сервер", Toast.LENGTH_LONG);
         toast.show();
+    }
+
+
+    public void retrofit(){
+        //Retrofit
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        //interface
+        RetroPart1 intf = retrofit.create(RetroPart1.class);
+        Call<Object> putPart3 = intf.getPart3(objectToJson());
+        try {
+            Response<Object> reer = putPart3.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d("retro", "retrofit: done");
     }
 
 

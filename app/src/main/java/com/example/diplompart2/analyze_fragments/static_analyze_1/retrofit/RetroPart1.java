@@ -24,6 +24,9 @@ public interface RetroPart1 {
     @POST("/apps")
     Call<Object> getPart2(@Body String body);
 
+    @Headers("Content-Type: application/json")
+    @POST("/appdyna")
+    Call<Object> getPart3(@Body String body);
 
 
 }

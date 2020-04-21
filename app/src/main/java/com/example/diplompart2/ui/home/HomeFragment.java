@@ -59,6 +59,8 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
     private EmployeeStatic1Database db = App.getInstance().getDatabase();  // получение базы данных
     private EmployeeStatic1Dao employeeStatic1Dao = db.employeeStatic1Dao(); // get dao
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 100;
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 101;
+
     // Fragments
     private static Fragment fragmentStatic1, fragmentStatic2, fragmentDynamic;
     private FragmentTransaction fragmentTransaction;
@@ -178,6 +180,13 @@ public class HomeFragment extends Fragment implements MyLoadingButton.MyLoadingB
                     new String[]{Manifest.permission.READ_PHONE_STATE},
                     MY_PERMISSIONS_REQUEST_READ_PHONE_STATE); // разрешение не предоставлено
         }
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE); // разрешение не предоставлено
+        }
+
         else {
             // разрешение предоставлено
         }

@@ -132,6 +132,9 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
                 openApp = apkFullName.get(position);
+
+                SaveJson.setApkId(String.valueOf(position));
+                SaveJson.setApk_name(String.valueOf(apkName.get(position)));
                 hookOfApp(openApp, position);
             }
         });
@@ -149,7 +152,7 @@ public class DynamicFragment extends Fragment implements PropertyChangeListener 
         SaveJson saveJson = new SaveJson(Objects.requireNonNull(getContext()).getApplicationContext());
         saveJson.jsonToObject();
         saveJson.setParamName();
-        saveJson.write();
+        saveJson.retrofit();
     }
     // использование другого потока
     private void saveTextMultithreading(){
