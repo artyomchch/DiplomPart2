@@ -1,0 +1,63 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "a8e8d745b8ea0131b1418c5f0a586938",
+    "entities": [
+      {
+        "tableName": "EmployeeStatic2",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`apkId` INTEGER NOT NULL, `apkName` TEXT, `apkFullName` TEXT, `apkVersion` TEXT, `apkPath` TEXT, `apkPermission` TEXT, PRIMARY KEY(`apkId`))",
+        "fields": [
+          {
+            "fieldPath": "apkId",
+            "columnName": "apkId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apkName",
+            "columnName": "apkName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "apkFullName",
+            "columnName": "apkFullName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "apkVersion",
+            "columnName": "apkVersion",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "apkPath",
+            "columnName": "apkPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "apkPermission",
+            "columnName": "apkPermission",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "apkId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"a8e8d745b8ea0131b1418c5f0a586938\")"
+    ]
+  }
+}

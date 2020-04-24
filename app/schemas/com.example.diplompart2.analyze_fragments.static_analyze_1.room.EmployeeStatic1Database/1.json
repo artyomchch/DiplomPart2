@@ -1,0 +1,57 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "90a7c63fd2f83f624a0df605f7e3fc74",
+    "entities": [
+      {
+        "tableName": "EmployeeStatic1",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`staticId` INTEGER NOT NULL, `root` INTEGER, `model` TEXT, `system` TEXT, `imei` TEXT, PRIMARY KEY(`staticId`))",
+        "fields": [
+          {
+            "fieldPath": "staticId",
+            "columnName": "staticId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "root",
+            "columnName": "root",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "model",
+            "columnName": "model",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "system",
+            "columnName": "system",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "imei",
+            "columnName": "imei",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "staticId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"90a7c63fd2f83f624a0df605f7e3fc74\")"
+    ]
+  }
+}
